@@ -16,7 +16,7 @@ Standalone skill, zero dependencies, pure `SKILL.md`. Compatible with Claude Cod
 |------|------|
 | ✍️ **SagaSmith-module-gen-skill** (this repo) | Standalone module generation skill |
 | 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | Complete AI DM runtime |
-| 📦 [SagaSmith-skill](https://github.com/dajiaohuang/SagaSmith-skill) | Full skill pack |
+| 📦 [SagaSmith-skills](https://github.com/dajiaohuang/SagaSmith-skills) | Full skill pack |
 
 ---
 

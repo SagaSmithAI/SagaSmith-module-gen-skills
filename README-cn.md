@@ -16,7 +16,7 @@
 |------|------|
 | ✍️ **SagaSmith-module-gen-skill**（本仓库） | 独立模组生成 skill |
 | 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | 完整 AI DM 运行时 |
-| 📦 [SagaSmith-skill](https://github.com/dajiaohuang/SagaSmith-skill) | 全家桶 skill 插件包 |
+| 📦 [SagaSmith-skills](https://github.com/dajiaohuang/SagaSmith-skills) | 全家桶 skill 插件包 |
 
 ---
 
