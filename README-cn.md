@@ -14,7 +14,7 @@
 
 | 仓库 | 定位 |
 |------|------|
-| ✍️ **SagaSmith-module-gen-skill**（本仓库） | 独立模组生成 skill |
+| ✍️ **SagaSmith-module-gen-skills**（本仓库） | 独立模组生成 skill |
 | 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | 完整 AI DM 运行时 |
 | 📦 [SagaSmith-skills](https://github.com/dajiaohuang/SagaSmith-skills) | 全家桶 skill 插件包 |
 
@@ -94,7 +94,7 @@ SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文
 
 ```bash
 # Claude Code / Codex / Cursor / Copilot
-npx skills add dajiaohuang/SagaSmith-module-gen-skill
+npx skills add dajiaohuang/SagaSmith-module-gen-skills
 
 # ClawHub
 npx clawhub install sagasmith-modulegen
