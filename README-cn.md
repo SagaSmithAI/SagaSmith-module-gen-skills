@@ -10,6 +10,16 @@
 
 ---
 
+## 生态
+
+| 仓库 | 定位 |
+|------|------|
+| ✍️ **SagaSmith-modulegen**（本仓库） | 独立模组生成 skill |
+| 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | 完整 AI DM 运行时 |
+| 📦 [SagaSmith-skill](https://github.com/dajiaohuang/SagaSmith-skill) | 全家桶 skill 插件包 |
+
+---
+
 ## 不是"创意点子生成器"
 
 大多数 AI 写模组是这样的：你让它"想个冒险"，它给你一段散文式描述，没有结构、没有数值、没有关卡设计。
@@ -104,16 +114,6 @@ Agent 会：
 2. 生成带 `####` 房间标题、NPC 对话提示、DC 值的完整 Markdown
 3. 产出伏笔-回收表 + 怪物数据附录
 4. 写入文件，可直接导入 SagaSmith 或其他 D&D agent 跑团
-
----
-
-## 生态
-
-| 仓库 | 定位 |
-|------|------|
-| ✍️ **SagaSmith-modulegen**（本仓库） | 独立模组生成 skill |
-| 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | 完整 AI DM 运行时 |
-| 📦 [SagaSmith-skill](https://github.com/dajiaohuang/SagaSmith-skill) | 全家桶 skill 插件包 |
 
 ---
 
