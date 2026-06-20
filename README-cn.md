@@ -102,18 +102,118 @@ npx clawhub install sagasmith-modulegen
 
 ---
 
-## 生成示例
+---
 
-对 Agent 说：
+## 使用示例
 
-> *"帮我生成一个 3 级海盗主题的 short 模组，用 Three-Act 范式，反派是水元素祭祀，两处反转，2 个结局分支。"*
+### One-shot — 单次冒险
 
-Agent 会：
+```
+用户: 帮我生成一个 2 级 Halloween 主题 one-shot，
+      用 Five-Room Dungeon 范式，反派是稻草人精魂
 
-1. 确认参数 → 按模板逐章生成
-2. 生成带 `####` 房间标题、NPC 对话提示、DC 值的完整 Markdown
-3. 产出伏笔-回收表 + 怪物数据附录
-4. 写入文件，可直接导入 SagaSmith 或其他 D&D agent 跑团
+Agent:
+✅ 参数确认：One-shot · Five-Room Dungeon
+   主题：万圣节/南瓜田 · 反派：稻草人精魂 (CR 1 × 3)
+   等级：2 · 氛围：恐怖喜剧
+
+[生成完整模组 → modules/pumpkin_horror.md]
+
+输出摘要：
+📜 南瓜田的恐怖 / The Pumpkin Horror
+   Scene 1: 丰收节庆典 (入口守卫 — 失踪儿童事件)
+   Scene 2: 老磨坊的谜语 (谜题 — 稻草人只会说字谜)
+   Scene 3: 活过来的南瓜田 (反转 — 稻草人是受害者)
+   Scene 4: 谷仓 Boss 战 (高潮 — 真正的幕后: 绿鬼婆)
+   Scene 5: 丰收节归来 (奖励 — 村民的感激 + 1 件魔法物品)
+```
+
+### Short — 三幕短战役
+
+```
+用户: 帮我生成一个 5 级沙漠盗墓 short 模组，
+      用 Kishōtenketsu 范式，反派是木乃伊领主
+
+Agent:
+✅ 参数确认：Short (3 Ch) · Kishōtenketsu (起承转合)
+   主题：沙漠/古墓 · 反派：木乃伊领主 + 圣甲虫集群
+   等级：5 · 反转：木乃伊在守护封印更邪恶的东西
+
+[生成 3 章 → 每章 3 场景 → modules/desert_tomb.md]
+
+输出摘要：
+📜 沙海之下的封印
+   第一章「起」— 绿洲商队的委托，三个 NPC 各有秘密
+   第二章「承」— 深入地下金字塔，5 个陷阱房间
+   第三章「转」— 木乃伊并非敌人，真正威胁是封印下的
+                    古老存在。结局分支：释放 / 加固 / 摧毁
+   附录：NPC 全维度 · 4 个伏笔回收 · 木乃伊领主数据
+```
+
+### Medium — 五章战役
+
+```
+用户: 生成一个 medium 模组，7 级都市政治主题，
+      用 Hero's Journey 范式
+
+Agent:
+[Step M1] 骨架生成中...
+   5 章大纲 · 4 个派系 · 12 个 NPC (全部 want/fear/secret)
+   详见 modules/city_of_masks_skeleton.md，请审核。
+
+用户: Ch.2 的反派动机不够强，改成他被勒索
+
+Agent:
+✅ 已调整：议长是被 Zhentarim 用家族秘密勒索的
+
+[Step M2] 前 3 章正文生成中...
+   Ch.1 平凡世界 · Ch.2 跨越门槛 · Ch.3 试炼
+   详见 modules/city_of_masks_ch1-3.md
+
+[Step M3] 后 2 章 + 附录生成中...
+   Ch.4 深渊 · Ch.5 归来
+   伏笔回收表 (5 章全链) · 势力变化时间线 · Boss 三阶段
+   ✅ 最终文件：modules/city_of_masks.md
+```
+
+### Long — 八章史诗
+
+```
+用户: 生成一个 long 模组，1-20 级奇幻史诗，
+      用 Double Triangle 范式
+
+Agent:
+[Step L1] 概念 + 双弧线大纲...
+   反派时间线 (8 章) · 双弧线结构 · Ch.4 假胜利设计
+   Ch.8 多重结局 (4 分支) · 22 个 NPC 含个人弧光
+   详见 modules/the_last_circle_concept.md
+
+[经过 5 步渐进生成...]
+
+✅ 最终模组：modules/the_last_circle.md
+   📊 8 章 · 48 场景 · 22 NPC · 12 伏笔回收链
+   👤 每个 PC 2-3 场景个人线 · Boss 四阶段
+```
+
+### Sandbox — 开放世界
+
+```
+用户: 生成一个沙盒，维京主题群岛探索
+
+Agent:
+[Step S1] 世界骨架...
+   6 个区域 · 3 个派系 · 随机遭遇表 (1d12)
+   详见 modules/viking_isles_world.md
+
+用户: 生成北岛区域
+
+Agent:
+[Step S2] 区域：北岛·霜骨群岛
+   特征：被龙裔部族控制的冻土岛链
+   势力：白霜部族 · 事件线 × 3
+   地点：龙骸港 · 霜语洞穴 · 长老议会厅 · 热泉圣所
+   ✅ 已追加到 modules/viking_isles.md
+```
 
 ---
 
