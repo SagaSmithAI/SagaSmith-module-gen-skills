@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "sagasmith-modulegen": {
+      "source": "dajiaohuang/SagaSmith-modulegen",
+      "sourceType": "github",
+      "skillPath": "SKILL.md",
+      "computedHash": "f4165176c0cd7efe061be82ea38deb03644a0a6036fe40feabd71c47503c9099"
+    }
+  }
+}

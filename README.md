@@ -14,7 +14,7 @@ Standalone skill, zero dependencies, pure `SKILL.md`. Compatible with Claude Cod
 
 | Repo | Role |
 |------|------|
-| ✍️ **SagaSmith-modulegen** (this repo) | Standalone module generation skill |
+| ✍️ **SagaSmith-module-gen-skill** (this repo) | Standalone module generation skill |
 | 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | Complete AI DM runtime |
 | 📦 [SagaSmith-skill](https://github.com/dajiaohuang/SagaSmith-skill) | Full skill pack |
 
@@ -187,7 +187,7 @@ Agent:
 
 ```bash
 # Claude Code / Codex / Cursor / Copilot
-npx skills add dajiaohuang/SagaSmith-modulegen
+npx skills add dajiaohuang/SagaSmith-module-gen-skill
 
 # ClawHub
 npx clawhub install sagasmith-modulegen
