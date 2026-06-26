@@ -183,6 +183,37 @@ Agent:
 
 ---
 
+## Platform Compatibility
+
+| Platform | Type | Subagent Parallel | Behavior |
+|----------|------|:---:|----------|
+| **Claude Code** | CLI | ✅ | Full parallel — `Agent` + `run_in_background` |
+| **NanoBot** | Runtime | ✅ | Full parallel — native `spawn` |
+| **Codex (OpenAI)** | CLI | ✅ | Full parallel — Agent spawning |
+| **Cursor** | IDE | ✅ | Full parallel — Agent mode |
+| **OpenClaw** | Runtime | ✅ | Full parallel — built-in subagent |
+| **Hermes** | Runtime | ✅ | Full parallel — built-in subagent |
+| **GitHub Copilot** | IDE | ⚠️ | Agent mode available but immature — sequential recommended |
+| **Cline** | IDE | ⚠️ | Partial support — sequential recommended |
+| **Coze (扣子)** | Workflow | ❌ | Sequential only — pre-defined pipeline, no dynamic spawn |
+| **Dify** | Workflow | ❌ | Sequential only — workflow nodes, no dynamic fork |
+| **FastGPT** | Workflow | ❌ | Sequential only |
+| **Aider** | CLI | ❌ | Sequential only — single-agent architecture |
+| **Continue** | IDE | ❌ | Sequential only — chat-based assistant |
+| **通义灵码 (Tongyi)** | IDE | ❌ | Sequential only |
+| **Trae (ByteDance)** | IDE | ❌ | Sequential only (unconfirmed) |
+| **Windsurf (Codeium)** | IDE | ❌ | Sequential only (unconfirmed) |
+| **WorkBuddy** | IDE | ❌ | Sequential only (unconfirmed) |
+| **Augment Code** | IDE | ❌ | Sequential only (unconfirmed) |
+
+> **✅ = Full parallel**: Medium/Long/Sandbox chapters generated concurrently. One-shot and Short are always single-pass regardless of platform.
+>
+> **❌ = Sequential fallback**: Auto-degrades to Core Rule 3 — generate one chapter at a time, user reviews each step. Same output quality, longer wall-clock time. The skill detects platform capability and falls back silently.
+>
+> **⚠️ = Partial**: Subagent exists but unreliable — default to sequential for best results.
+
+---
+
 ## Quick Install
 
 ```bash

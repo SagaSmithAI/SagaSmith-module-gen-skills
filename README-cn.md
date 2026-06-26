@@ -90,6 +90,37 @@ SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文
 
 ---
 
+## 平台兼容性
+
+| 平台 | 类型 | Subagent 并行 | 行为 |
+|------|------|:---:|------|
+| **Claude Code** | CLI | ✅ | 完整并行 — `Agent` + `run_in_background` |
+| **NanoBot** | 运行时 | ✅ | 完整并行 — 原生 `spawn` |
+| **Codex (OpenAI)** | CLI | ✅ | 完整并行 — Agent 调度 |
+| **Cursor** | IDE | ✅ | 完整并行 — Agent 模式 |
+| **OpenClaw** | 运行时 | ✅ | 完整并行 — 内置 subagent |
+| **Hermes** | 运行时 | ✅ | 完整并行 — 内置 subagent |
+| **GitHub Copilot** | IDE | ⚠️ | Agent 模式但不够成熟，建议顺序 |
+| **Cline** | IDE | ⚠️ | 部分支持，建议顺序 |
+| **扣子 (Coze)** | 工作流 | ❌ | 纯顺序 — 预定义 pipeline，不支持动态 spawn |
+| **Dify** | 工作流 | ❌ | 纯顺序 — 工作流节点，无法动态 fork |
+| **FastGPT** | 工作流 | ❌ | 纯顺序 |
+| **Aider** | CLI | ❌ | 纯顺序 — 单 agent 架构 |
+| **Continue** | IDE | ❌ | 纯顺序 — 聊天式辅助 |
+| **通义灵码** | IDE | ❌ | 纯顺序 |
+| **Trae (字节)** | IDE | ❌ | 纯顺序（待确认） |
+| **Windsurf (Codeium)** | IDE | ❌ | 纯顺序（待确认） |
+| **WorkBuddy** | IDE | ❌ | 纯顺序（待确认） |
+| **Augment Code** | IDE | ❌ | 纯顺序（待确认） |
+
+> **✅ = 完整并行**：Medium/Long/Sandbox 章节并发生成。One-shot 和 Short 在所有平台上均为单次生成，不受影响。
+>
+> **❌ = 顺序回退**：自动退化为 Core Rule 3——逐章生成，用户逐章审查。输出质量完全相同，只是耗时更长。Skill 会自动检测平台能力并静默降级。
+>
+> **⚠️ = 部分支持**：有 subagent 但不稳定——默认走顺序模式以确保最佳结果。
+
+---
+
 ## 快速安装
 
 ```bash

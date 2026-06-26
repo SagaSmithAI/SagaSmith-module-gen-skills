@@ -102,6 +102,41 @@ Agent(description="Generate chapter 1", prompt="<task content>")
 **OpenClaw / Hermes:**
 Use the platform's equivalent subagent/work spawning API.
 
+### Fallback：无 Subagent 的平台
+
+以下平台**不支持**动态 subagent 并行生成。在这些平台上，忽略 spawn/subagent 指令，改为**逐章顺序生成**：
+
+| 平台 | 类型 | Subagent | 回退行为 |
+|------|------|----------|---------|
+| **NanoBot** | 运行时 | ✅ | 原生 `spawn` 并行 |
+| **Claude Code** | CLI | ✅ | `Agent` + `run_in_background` |
+| **Codex** | CLI | ✅ | Agent spawning |
+| **Cursor** | IDE | ✅ | Agent 模式并行 |
+| **Copilot** | IDE | ⚠️ | 有 Agent 模式但不成熟，建议顺序 |
+| **OpenClaw** | 运行时 | ✅ | 内置 subagent |
+| **Hermes** | 运行时 | ✅ | 内置 subagent |
+| **Cline** | IDE | ⚠️ | 部分支持，建议顺序 |
+| **扣子 (Coze)** | 工作流 | ❌ | 全部顺序，每步用户审查 |
+| **Dify** | 工作流 | ❌ | 全部顺序 |
+| **FastGPT** | 工作流 | ❌ | 全部顺序 |
+| **Aider** | CLI | ❌ | 全部顺序 |
+| **Continue** | IDE | ❌ | 全部顺序 |
+| **通义灵码** | IDE | ❌ | 全部顺序 |
+| **Trae (字节)** | IDE | ❌ | 全部顺序（待确认） |
+| **Windsurf** | IDE | ❌ | 全部顺序（待确认） |
+| **WorkBuddy** | IDE | ❌ | 全部顺序（待确认） |
+| **Augment Code** | IDE | ❌ | 全部顺序（待确认） |
+
+**顺序回退规则：**
+
+1. Core Rule 3 是通用规则——多步生成，每步产出后用户审查。无 subagent 时这条即默认行为
+2. 遇到 spawn/subagent 指令时**静默忽略**，改为逐章顺序生成：生成 Ch.1 → 写入 → 生成 Ch.2 → 写入 → ...
+3. 所有章节写完后，合并步骤不变（顺序拼接即可）
+4. 质量要求不变——章节模板、NPC 维度、伏笔表等全部照常产出
+5. **One-shot 和 Short 不受影响**——它们本来就不 spawn
+
+**判别方法：** 不确定平台是否支持 subagent 时，先尝试。若报错或无对应工具，自动回退到顺序模式，并告知用户："当前平台不支持并行生成，改为顺序模式，预计耗时更长但质量相同。"
+
 ### 并发控制
 
 1. 启动 subagent 前先检查并发上限
