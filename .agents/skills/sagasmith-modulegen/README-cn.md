@@ -2,6 +2,10 @@
 
 [English](README.md) | [中文](README-cn.md)
 
+<p align="center">
+  <img src="images/sagasmith.png" alt="SagaSmith" width="200">
+</p>
+
 **D&D 5e 冒险模组 AI 生成器**
 
 > 一句话让 AI 写出完整可跑的 D&D 冒险——带章节结构、NPC 欲望与秘密、伏笔回收链、DC 数值、怪物数据。

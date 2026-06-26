@@ -2,6 +2,10 @@
 
 [English](README.md) | [中文](README-cn.md)
 
+<p align="center">
+  <img src="images/sagasmith.png" alt="SagaSmith" width="200">
+</p>
+
 **D&D 5e Adventure Module AI Generator**
 
 > One sentence → a complete, runnable D&D adventure with chapter structure, NPC wants & secrets, foreshadowing chains, DC values, and monster stats.
