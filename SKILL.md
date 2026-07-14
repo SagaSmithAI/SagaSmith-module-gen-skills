@@ -14,7 +14,9 @@ tags:
 
 ## Core Rules
 
-1. **Always write to file first.** Never inline-import generated content. Write to `<workspace>/modules/<name>.md`, then import from that path via `dnd_module action=import source_path=...`. This preserves the generated module as a reusable artifact.
+1. **Always write to an artifact first.** In MCP Runtime, call `module_write(name, content)`,
+   inspect it with `module_inspect`, then call `module_import(campaign_id, artifact)`.
+   Never inline-import generated content. This preserves the generated module as a reusable artifact.
 
 2. **One-shot and short are one-step generation.** Generate the complete module in a single pass, write to file, import.
 
@@ -766,3 +768,18 @@ Report chapter/scene/chunk counts after import. If module already exists, ask us
 **Hybrid:**
 - **Iceberg Diagram**: surface hook → hidden depths.
 - **Reverse Dungeon**: players defend, monsters attack.
+## Runtime handoff
+
+Generated modules are runtime artifacts, not direct database writes. When the
+SagaSmith D&D MCP is available:
+
+1. Validate the Markdown/JSON structure and mark scene visibility explicitly as
+   `public`, `party`, or `keeper`.
+2. Call `module_write` with a safe artifact name.
+3. Call `module_inspect` and stop on warnings that affect scene boundaries.
+4. Call `module_import` and record the returned module ID/checksum.
+5. Let `module_index` and `module_set_progress` drive play; do not read the local
+   artifact path directly from an agent.
+
+Module search is candidate selection only. Expand or read a selected scene through
+MCP, and preserve keeper content for DM-only visibility.
