@@ -15,7 +15,8 @@ tags:
 ## Core Rules
 
 1. **Always write to an artifact first.** In MCP Runtime, call `module_write(name, content)`,
-   inspect it with `module_inspect`, then call `module_import(campaign_id, artifact)`.
+   inspect it with `module_inspect`, then call
+   `module_import(campaign_id, artifact, idempotency_key)`.
    Never inline-import generated content. This preserves the generated module as a reusable artifact.
 
    Use stable Markdown headings for space evidence: `##` for scenes and `####`
@@ -783,7 +784,10 @@ SagaSmith D&D MCP is available:
    `public`, `party`, or `keeper`.
 2. Call `module_write` with a safe artifact name.
 3. Call `module_inspect` and stop on warnings that affect scene boundaries.
-4. Call `module_import` and record the returned module ID/checksum.
+   Inspection uses the same D&D parser profile as import; do not substitute a
+   generic Markdown interpretation.
+4. Call `module_import` with a stable campaign-wide idempotency key and record
+   the returned module ID/checksum. Reuse the key only for an exact retry.
 5. Let `module_index` and `module_set_progress` drive play; do not read the local
    artifact path directly from an agent.
 
