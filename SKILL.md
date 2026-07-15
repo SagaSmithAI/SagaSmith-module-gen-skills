@@ -18,6 +18,12 @@ tags:
    inspect it with `module_inspect`, then call `module_import(campaign_id, artifact)`.
    Never inline-import generated content. This preserves the generated module as a reusable artifact.
 
+   Use stable Markdown headings for space evidence: `##` for scenes and `####`
+   for numbered rooms such as `A1. Guard Room`. State dimensions only when the
+   module actually gives them (for example, `30 by 20 feet`). Do not draw or
+   imply a tactical map in prose. The D&D runtime derives a conservative scene
+   location list and creates a temporary combat map only when combat starts.
+
 2. **One-shot and short are one-step generation.** Generate the complete module in a single pass, write to file, import.
 
 3. **Medium and long are multi-step generation.** Each step produces one section of the module. User reviews each step before proceeding. This avoids context overflow and allows course correction.
