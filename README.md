@@ -3,14 +3,17 @@
 [English](README.md) | [中文](README-cn.md)
 
 <p align="center">
-  <img src="images/sagasmith.png" alt="SagaSmith" width="200">
+  <img src="images/SagaSmith.png" alt="SagaSmith" width="180">
 </p>
 
-**D&D 5e Adventure Module AI Generator**
+**An AI-native D&D 5e adventure design workflow.**
 
 > One sentence → a complete, runnable D&D adventure with chapter structure, NPC wants & secrets, foreshadowing chains, DC values, and monster stats.
 
-Standalone skill, zero dependencies, pure `SKILL.md`. Compatible with Claude Code, Codex, Cursor, Copilot, OpenClaw, Hermes — any agent supporting the SKILL.md standard.
+This is a pure `SKILL.md` package: it can draft modules on its own and can hand
+them to SagaSmith D&D MCP as editable artifacts. In MCP mode the required path is
+`module_write` → inspect → `module_import`; generated prose never bypasses review
+and enters a campaign database directly.
 
 ---
 
@@ -19,8 +22,9 @@ Standalone skill, zero dependencies, pure `SKILL.md`. Compatible with Claude Cod
 | Repo | Role |
 |------|------|
 | ✍️ **SagaSmith-module-gen-skills** (this repo) | Standalone module generation skill |
-| 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | Complete AI DM runtime |
-| 📦 [SagaSmith-skills](https://github.com/dajiaohuang/SagaSmith-skills) | Full skill pack |
+| 🎲 [SagaSmith-agent](https://github.com/SagaSmithAI/SagaSmith-agent) | Multi-channel Agent Host |
+| 🔌 [SagaSmith-dnd-mcp](https://github.com/SagaSmithAI/SagaSmith-dnd-mcp) | Artifact storage, inspection, import, scene/spatial index |
+| 📦 [SagaSmith-dnd-skills](https://github.com/SagaSmithAI/SagaSmith-dnd-skills) | D&D table-running workflow |
 
 ---
 
@@ -30,12 +34,12 @@ Most AI module tools produce a paragraph of prose — no structure, no numbers, 
 
 SagaSmith Module Generator produces **complete, import-ready module files**:
 
-- ✅ Chapter-organized `# heading` structure (direct `dnd_module action=import`)
+- ✅ Stable chapter/scene/room Markdown headings understood by the D&D importer
 - ✅ Room-level `####` sub-headings with type tags (`room` / `statblock` / `list`)
 - ✅ Full NPC dimensions: `name / race / class / alignment / want / fear / secret`
 - ✅ Foreshadowing-recovery table + faction network + ending branches
 - ✅ DC values + monster stat blocks + magic items
-- ✅ Scene index JSON export (DM navigates without querying a database)
+- ✅ Import-ready spatial evidence: numbered rooms, explicit dimensions, links, and encounter context
 
 ---
 
@@ -222,7 +226,7 @@ Agent:
 
 ```bash
 # Claude Code / Codex / Cursor / Copilot
-npx skills add dajiaohuang/SagaSmith-module-gen-skills
+npx skills add SagaSmithAI/SagaSmith-module-gen-skills
 
 # ClawHub
 npx clawhub install sagasmith-modulegen
