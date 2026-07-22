@@ -12,8 +12,8 @@
 
 This is a pure `SKILL.md` package: it can draft modules on its own and can hand
 them to SagaSmith D&D MCP as editable artifacts. In MCP mode the required path is
-`module_write` → inspect → `module_import`; generated prose never bypasses review
-and enters a campaign database directly.
+`module_import(stage → inspect → validate → ingest → activate)`; generated prose
+never bypasses review and enters a campaign database directly.
 
 ---
 
@@ -216,7 +216,7 @@ Agent:
 
 > **✅ = Full parallel**: Medium/Long/Sandbox chapters generated concurrently. One-shot and Short are always single-pass regardless of platform.
 >
-> **❌ = Sequential fallback**: Auto-degrades to Core Rule 3 — generate one chapter at a time, user reviews each step. Same output quality, longer wall-clock time. The skill detects platform capability and falls back silently.
+> **❌ = Sequential fallback**: Auto-degrades to Core Rule 4 — generate one chapter at a time, user reviews each step. Same output quality, longer wall-clock time. The skill detects platform capability and falls back silently.
 >
 > **⚠️ = Partial**: Subagent exists but unreliable — default to sequential for best results.
 
