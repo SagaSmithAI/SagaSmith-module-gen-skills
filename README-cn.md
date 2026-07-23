@@ -12,7 +12,8 @@
 
 这是一个纯 `SKILL.md` 包：既可独立生成 Markdown，也可通过 SagaSmith D&D
 MCP 进入可编辑 artifact → 检查 → 导入流程。MCP 模式必须遵守
-`module_write` → inspect → `module_import`，不能让生成散文绕过审查直接写入战役。
+`module_import(stage → inspect → validate → ingest → activate)`，不能让生成散文
+绕过审查直接写入战役。
 
 ---
 
@@ -122,7 +123,7 @@ SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文
 
 > **✅ = 完整并行**：Medium/Long/Sandbox 章节并发生成。One-shot 和 Short 在所有平台上均为单次生成，不受影响。
 >
-> **❌ = 顺序回退**：自动退化为 Core Rule 3——逐章生成，用户逐章审查。输出质量完全相同，只是耗时更长。Skill 会自动检测平台能力并静默降级。
+> **❌ = 顺序回退**：自动退化为 Core Rule 4——逐章生成，用户逐章审查。输出质量完全相同，只是耗时更长。Skill 会自动检测平台能力并静默降级。
 >
 > **⚠️ = 部分支持**：有 subagent 但不稳定——默认走顺序模式以确保最佳结果。
 

@@ -1,23 +1,16 @@
 ---
 name: sagasmith-modulegen
-description: "Generate D&D 5e adventure modules. Supports one-shot (Five-Room Dungeon, Heist, Mystery), short 3-chapter (Three-Act, Kishōtenketsu), medium 5-chapter (Hero's Journey, Plot Point, Faction Turn), long 8-chapter (Double Triangle, Conspyramid, Megadungeon), and sandbox (Hexcrawl, Node-Based, Blorb) — 25 narrative paradigms total. Use when the user asks to create, generate, or make a new adventure, module, or campaign setting."
-license: MIT
-tags:
-  - dnd
-  - ttrpg
-  - adventure
-  - module-generator
-  - creative-writing
-  - worldbuilding
+description: "Generate import-ready D&D 5e adventures, modules, and campaign settings with stable runtime identities, secrets, clues, triggers, consequences, branches, and 25 narrative paradigms. Use for one-shots, short/medium/long campaigns, sandboxes, module revisions, or staged SagaSmith D&D MCP import."
 ---
 # D&D Module Generator
 
 ## Core Rules
 
-1. **Always write to an artifact first.** In MCP Runtime, call `module_write(name, content)`,
-   inspect it with `module_inspect`, then call
-   `module_import(campaign_id, artifact, idempotency_key)`.
-   Never inline-import generated content. This preserves the generated module as a reusable artifact.
+1. **Always stage a managed artifact first.** In MCP Runtime call
+   `module_import(action="stage", payload={name, content})`, keep the returned
+   `job_id`, then call `inspect`, `validate`, `ingest`, and `activate` in order.
+   Use one stable, stage-specific idempotency key per write. Never bypass review
+   with retired `module_write`, `module_inspect`, or `dnd_module` calls.
 
    Use stable Markdown headings for space evidence: `##` for scenes and `####`
    for numbered rooms such as `A1. Guard Room`. State dimensions only when the
@@ -25,13 +18,18 @@ tags:
    imply a tactical map in prose. The D&D runtime derives a conservative scene
    location list and creates a temporary combat map only when combat starts.
 
-2. **One-shot and short are one-step generation.** Generate the complete module in a single pass, write to file, import.
+2. **Emit a runtime manifest.** Follow `references/runtime-contract.md`. Give
+   entities, secrets, clues, plot nodes, foreshadowing, and branches stable ids;
+   define initial knowers, triggers, consequences, failure clocks, and visibility.
+   Module definitions are not campaign facts until play realizes them.
 
-3. **Medium and long are multi-step generation.** Each step produces one section of the module. User reviews each step before proceeding. This avoids context overflow and allows course correction.
+3. **One-shot and short are one-step generation.** Generate the complete module in a single pass, write to file, import.
 
-4. **Sandbox generates top-level overview first**, then each region independently.
+4. **Medium and long are multi-step generation.** Each step produces one section of the module. User reviews each step before proceeding. This avoids context overflow and allows course correction.
 
-5. **Use subagent spawning for parallel chapter/region generation in medium, long, and sandbox.** See Spawn Strategy below for rules.
+5. **Sandbox generates top-level overview first**, then each region independently.
+
+6. **Use subagent spawning for parallel chapter/region generation in medium, long, and sandbox.** See Spawn Strategy below for rules.
 
 ---
 
@@ -138,7 +136,7 @@ Use the platform's equivalent subagent/work spawning API.
 
 **顺序回退规则：**
 
-1. Core Rule 3 是通用规则——多步生成，每步产出后用户审查。无 subagent 时这条即默认行为
+1. Core Rule 4 是通用规则——多步生成，每步产出后用户审查。无 subagent 时这条即默认行为
 2. 遇到 spawn/subagent 指令时**静默忽略**，改为逐章顺序生成：生成 Ch.1 → 写入 → 生成 Ch.2 → 写入 → ...
 3. 所有章节写完后，合并步骤不变（顺序拼接即可）
 4. 质量要求不变——章节模板、NPC 维度、伏笔表等全部照常产出
@@ -199,6 +197,9 @@ Generate the complete module in one pass.
 **One-shot template:**
 
 ```markdown
+<!-- sagasmith-runtime-manifest
+<complete schema-version-1 JSON from references/runtime-contract.md>
+-->
 # <模组名>
 
 ## 冒险概要
@@ -226,6 +227,9 @@ Generate the complete module in one pass.
 **Short template (3 chapters, Three-Act):**
 
 ```markdown
+<!-- sagasmith-runtime-manifest
+<complete schema-version-1 JSON from references/runtime-contract.md>
+-->
 # <模组名>
 
 ## 冒险概要 | 冒险背景 | 运作本模组
@@ -249,12 +253,15 @@ Generate the complete module in one pass.
 ## 主要 NPC (want/fear/secret) | 伏笔-回收表 | 怪物 | 魔法物品
 ```
 
-After writing the file, import and export scene index:
+After writing the file, run the staged MCP lifecycle:
 
 ```
-dnd_module action=import campaign_id=<id> module_name="<name>" source_path="<workspace>/modules/<name>.md"
-dnd_module action=index campaign_id=<id>
-python -m nanobot.dnd.db.cli module export-scenes --campaign <id> --output "<workspace>/modules/<name>_scenes.json"
+module_import(campaign_id=<id>, action="stage", payload={"name": "<name>.md", "content": "<full markdown>"})
+module_import(campaign_id=<id>, action="inspect", payload={"job_id": "<job_id>"})
+module_import(campaign_id=<id>, action="validate", payload={"job_id": "<job_id>"})
+module_import(campaign_id=<id>, action="ingest", payload={"job_id": "<job_id>"})
+module_import(campaign_id=<id>, action="activate", payload={"job_id": "<job_id>"}, expected_revision=<revision>)
+module_query(campaign_id=<id>, view="index")
 ```
 
 ---
@@ -266,6 +273,9 @@ python -m nanobot.dnd.db.cli module export-scenes --campaign <id> --output "<wor
 **Output:** `<workspace>/modules/<name>_skeleton.md`
 
 ```markdown
+<!-- sagasmith-runtime-manifest
+<complete schema-version-1 JSON for all planned entities and nodes>
+-->
 # <模组名>（骨架）
 
 ## 冒险概要
@@ -436,7 +446,7 @@ task: "生成附录（NPC完整版、伏笔-回收表、势力变化）。基于
 - Ch.4-5（来自 `_ch4.md`, `_ch5.md`）
 - 附录（来自 `_appendix.md`，含 NPC、伏笔-回收表、势力变化、怪物、魔法物品）
 
-Import, index, and export scene index (see Import section).
+Run the staged lifecycle and verify the server-owned scene index (see Import section).
 
 ---
 
@@ -447,6 +457,9 @@ Import, index, and export scene index (see Import section).
 **Output:** `<workspace>/modules/<name>_concept.md`
 
 ```markdown
+<!-- sagasmith-runtime-manifest
+<complete schema-version-1 JSON for all planned entities and nodes>
+-->
 # <模组名>（概念）
 
 ## 冒险概要 (10-15 sentences, full 8-chapter story)
@@ -647,7 +660,8 @@ task: "生成怪物附录（含 Boss 多阶段）和魔法物品附录。
 
 ### Step L5 — 组装
 
-Combine all parts into `<workspace>/modules/<name>.md`. Import, index, and export scene index (see Import section).
+Combine all parts into `<workspace>/modules/<name>.md`. Run the staged lifecycle
+and verify the server-owned scene index (see Import section).
 
 ---
 
@@ -658,6 +672,9 @@ Combine all parts into `<workspace>/modules/<name>.md`. Import, index, and expor
 **Output:** `<workspace>/modules/<name>_world.md`
 
 ```markdown
+<!-- sagasmith-runtime-manifest
+<complete schema-version-1 JSON for all planned entities and nodes>
+-->
 # <沙盒名>（世界）
 
 ## 世界概况
@@ -708,34 +725,35 @@ task: "生成区域1：<区域名>，写入 <workspace>/modules/<name>_region1.m
 
 如果用户说"生成区域X"（单个），直接生成该区域，不用并行。
 
-After all regions: import, index, and export scene index (see Import section).
+After all regions, run the staged lifecycle and verify the server-owned scene
+index (see Import section).
 
 ---
 
 ## Import & Scene Index
 
-After the module file is complete:
+After the module file is complete, use one `job_id` through the entire managed
+lifecycle. Stop on inspect/validate errors and review warnings before ingest:
 
 ```
-# 1. Import into database
-dnd_module action=import campaign_id=<id> module_name="<name>" source_path="<workspace>/modules/<name>.md"
-
-# 2. Verify structure
-dnd_module action=index campaign_id=<id>
-
-# 3. Export scene index JSON (saved alongside the .md file)
-python -m nanobot.dnd.db.cli module export-scenes --campaign <id> --output "<workspace>/modules/<name>_scenes.json"
+module_import(stage: name+content)
+  -> module_import(inspect: job_id)
+  -> module_import(validate: job_id)
+  -> module_import(ingest: job_id)
+  -> module_import(activate: job_id, expected_revision)
+  -> module_query(view="index")
 ```
 
-The `_scenes.json` file mirrors the structure of `references/dnd-dm-skill/srd/scenes_index.json`:
+The server-owned index exposes:
 - Scene boundaries with line numbers
 - Keywords/tags per scene
 - Room-type annotations
 - Sub-section headings
+- Parser/checksum provenance and the validated runtime manifest
 
-This gives the DM a human-readable scene map they can reference without querying the database.
-
-Report chapter/scene/chunk counts after import. If module already exists, ask user before deleting and re-importing.
+Report chapter/scene/chunk counts after import. A changed module creates an
+immutable revision and a reviewable progress-impact diff; never delete the active
+module or rewrite realized campaign facts.
 
 ---
 
@@ -780,16 +798,21 @@ Report chapter/scene/chunk counts after import. If module already exists, ask us
 Generated modules are runtime artifacts, not direct database writes. When the
 SagaSmith D&D MCP is available:
 
-1. Validate the Markdown/JSON structure and mark scene visibility explicitly as
-   `public`, `party`, or `keeper`.
-2. Call `module_write` with a safe artifact name.
-3. Call `module_inspect` and stop on warnings that affect scene boundaries.
-   Inspection uses the same D&D parser profile as import; do not substitute a
-   generic Markdown interpretation.
-4. Call `module_import` with a stable campaign-wide idempotency key and record
-   the returned module ID/checksum. Reuse the key only for an exact retry.
-5. Let `module_index` and `module_set_progress` drive play; do not read the local
-   artifact path directly from an agent.
+1. Validate the Markdown and embedded runtime manifest; mark scene visibility
+   explicitly as `public`, `party`, or `keeper`.
+2. Call `module_import(action="stage", payload={name, content})` and retain the
+   returned managed artifact and `job_id`.
+3. Run `inspect` then `validate`. Stop on errors and review warnings that affect
+   scene boundaries, manifest identities, secrets, or spatial evidence. These
+   stages use the same D&D parser profile as ingest.
+4. Run `ingest`, review the module revision/progress diff, then `activate` with
+   the current campaign revision. Use stage-specific idempotency keys and reuse a
+   key only for an exact retry.
+5. Let `module_query(view="index" | "scene" | "current")` and
+   `module_set_progress` drive play; do not read a local artifact as runtime state.
+6. When play realizes a module outcome, the DM workflow records it through
+   `continuity_commit`. Do not pre-copy module possibilities, secrets, or future
+   branches into CampaignMemory.
 
 Module search is candidate selection only. Expand or read a selected scene through
 MCP, and preserve keeper content for DM-only visibility.

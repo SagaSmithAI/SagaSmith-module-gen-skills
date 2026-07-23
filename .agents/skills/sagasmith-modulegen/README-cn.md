@@ -3,14 +3,17 @@
 [English](README.md) | [中文](README-cn.md)
 
 <p align="center">
-  <img src="images/sagasmith.png" alt="SagaSmith" width="200">
+  <img src="images/SagaSmith.png" alt="SagaSmith" width="180">
 </p>
 
-**D&D 5e 冒险模组 AI 生成器**
+**AI 原生的 D&D 5e 冒险设计工作流。**
 
 > 一句话让 AI 写出完整可跑的 D&D 冒险——带章节结构、NPC 欲望与秘密、伏笔回收链、DC 数值、怪物数据。
 
-独立 skill，零依赖，纯 `SKILL.md`。兼容 Claude Code / Codex / Cursor / Copilot / OpenClaw / Hermes 等所有支持 SKILL.md 标准的 agent。
+这是一个纯 `SKILL.md` 包：既可独立生成 Markdown，也可通过 SagaSmith D&D
+MCP 进入可编辑 artifact → 检查 → 导入流程。MCP 模式必须遵守
+`module_import(stage → inspect → validate → ingest → activate)`，不能让生成散文
+绕过审查直接写入战役。
 
 ---
 
@@ -19,8 +22,9 @@
 | 仓库 | 定位 |
 |------|------|
 | ✍️ **SagaSmith-module-gen-skills**（本仓库） | 独立模组生成 skill |
-| 🎲 [SagaSmith-agent](https://github.com/dajiaohuang/SagaSmith-agent) | 完整 AI DM 运行时 |
-| 📦 [SagaSmith-skills](https://github.com/dajiaohuang/SagaSmith-skills) | 全家桶 skill 插件包 |
+| 🎲 [SagaSmith-agent](https://github.com/SagaSmithAI/SagaSmith-agent) | 多渠道 Agent Host |
+| 🔌 [SagaSmith-dnd-mcp](https://github.com/SagaSmithAI/SagaSmith-dnd-mcp) | artifact、检查、导入与场景/空间索引 |
+| 📦 [SagaSmith-dnd-skills](https://github.com/SagaSmithAI/SagaSmith-dnd-skills) | D&D 带团工作流 |
 
 ---
 
@@ -30,12 +34,12 @@
 
 SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文件**：
 
-- ✅ 按章节组织的 `# heading` 结构（`dnd_module action=import` 直读）
+- ✅ D&D importer 可识别的稳定章节、场景与房间 Markdown 标题
 - ✅ 房间级 `####` 子标题 + 类型标注（`room` / `statblock` / `list`）
 - ✅ NPC 全维度：`name / race / class / alignment / want / fear / secret`
 - ✅ 伏笔-回收表 + 势力关系网 + 结局分支
 - ✅ DC 数值 + 怪物数据 + 魔法物品
-- ✅ 导出场景索引 JSON（DM 无需查库即可导航）
+- ✅ 可导入的空间证据：编号房间、明确尺寸、连接关系与遭遇上下文
 
 ---
 
@@ -119,7 +123,7 @@ SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文
 
 > **✅ = 完整并行**：Medium/Long/Sandbox 章节并发生成。One-shot 和 Short 在所有平台上均为单次生成，不受影响。
 >
-> **❌ = 顺序回退**：自动退化为 Core Rule 3——逐章生成，用户逐章审查。输出质量完全相同，只是耗时更长。Skill 会自动检测平台能力并静默降级。
+> **❌ = 顺序回退**：自动退化为 Core Rule 4——逐章生成，用户逐章审查。输出质量完全相同，只是耗时更长。Skill 会自动检测平台能力并静默降级。
 >
 > **⚠️ = 部分支持**：有 subagent 但不稳定——默认走顺序模式以确保最佳结果。
 
@@ -129,7 +133,7 @@ SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文
 
 ```bash
 # Claude Code / Codex / Cursor / Copilot
-npx skills add dajiaohuang/SagaSmith-module-gen-skills
+npx skills add SagaSmithAI/SagaSmith-module-gen-skills
 
 # ClawHub
 npx clawhub install sagasmith-modulegen
