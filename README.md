@@ -243,4 +243,4 @@ npx clawhub install sagasmith-modulegen
 
 ## License
 
-MIT
+Apache-2.0
