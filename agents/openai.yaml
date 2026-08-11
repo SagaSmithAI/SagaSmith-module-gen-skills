@@ -1,0 +1,7 @@
+interface:
+  display_name: "SagaSmith Module Pack Builder"
+  short_description: "Create reviewed D&D Module Packs from adventure briefs"
+  default_prompt: "Use $sagasmith-modulegen to create and finalize a reviewed D&D Module Pack from my adventure brief."
+
+policy:
+  allow_implicit_invocation: true

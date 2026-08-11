@@ -1,4 +1,4 @@
-# ✍️ SagaSmith Module Generator
+# SagaSmith Module Pack 创作 Skill
 
 [English](README.md) | [中文](README-cn.md)
 
@@ -6,262 +6,74 @@
   <img src="images/SagaSmith.png" alt="SagaSmith" width="180">
 </p>
 
-**AI 原生的 D&D 5e 冒险设计工作流。**
+SagaSmith Module Generator 是面向 D&D 5e 的 AI 原生创作 Skill，用于按当前
+`sagasmith.content-package` v2 契约创作、审查并最终化可移植 Module Pack。
 
-> 一句话让 AI 写出完整可跑的 D&D 冒险——带章节结构、NPC 欲望与秘密、伏笔回收链、DC 数值、怪物数据。
+它不只是生成冒险散文，而是产出一份规范 Markdown 源稿、稳定运行时身份、结构化
+Pack 决策、精确来源证据、可审计草稿历史，以及一个不可变 Pack artifact。
 
-这是一个纯 `SKILL.md` 包：既可独立生成 Markdown，也可通过 SagaSmith D&D
-MCP 进入可编辑 artifact → 检查 → 导入流程。MCP 模式必须遵守
-`module_import(stage → inspect → validate → ingest → activate)`，不能让生成散文
-绕过审查直接写入战役。
+## 当前生命周期
 
----
+```text
+创作 brief 与 authoring ledger
+→ 规范 Module Markdown + runtime manifest v1
+→ module_draft(start)：机械首轮
+→ module_draft(evidence/edit)：Agent 审查与修复
+→ module_draft(finalize)：不可变 Module Pack v2
+→ content_pack(get)：最终复核与交付
+```
+
+安装和激活与构建严格分离：
+
+```text
+content_pack(import) → 安装为非激活 Module
+content_pack(activate) → 显式挂载到目标战役
+```
+
+默认结果是最终化的可移植 artifact，而不是已经激活的战役模组。
+
+## Skill 创作的内容
+
+- one-shot、独立冒险、连续战役和沙盒；
+- 稳定 entities、secrets、clues、plot nodes、foreshadowing 与 branches；
+- 章节、场景、子节和编号房间的 Markdown 结构；
+- 有来源证据的队伍人数、等级、升级方式与预生成角色适用性；
+- items、encounters、hazards、handouts、mechanics catalogs；
+- narrative dossiers、可达 endings、continuity 与精确依赖；
+- 有证据约束的 statblock、asset 和 actor 审查决策。
+
+Core、D&D 和 MCP 继续权威管理场景解析、来源 bundle、checksum、actor-card
+验证、不可变归档、修订、权限、幂等和激活。
+
+## 创作范式
+
+Skill 保留 Five-Room Dungeon、Node-Based、Hexcrawl、Three-Act、Hero's
+Journey、Kishōtenketsu、Heist、Mystery、Conspyramid、Faction Turn、Fish
+Tank、Blorb 等 25 种可复用范式。范式只指导设计，不会擅自变成 Pack schema
+值，也不再强制固定章节数。
+
+大型作品可以在共享 ledger 冻结后并行创作章节或区域。主 Agent 始终持有唯一
+runtime manifest，整合唯一规范源稿，并执行完整审查与最终化流程。
+
+## 安装
+
+```bash
+npx skills add SagaSmithAI/SagaSmith-module-gen-skills
+```
+
+以 `$sagasmith-modulegen` 调用。使用 SagaSmith D&D MCP 时，需要一个处于 Lobby
+的创作战役和经过绑定的 DM/Owner 身份。
 
 ## 生态
 
-| 仓库 | 定位 |
-|------|------|
-| ✍️ **SagaSmith-module-gen-skills**（本仓库） | 独立模组生成 skill |
-| 🎲 [SagaSmith-agent](https://github.com/SagaSmithAI/SagaSmith-agent) | 多渠道 Agent Host |
-| 🔌 [SagaSmith-dnd-mcp](https://github.com/SagaSmithAI/SagaSmith-dnd-mcp) | artifact、检查、导入与场景/空间索引 |
-| 📦 [SagaSmith-dnd-skills](https://github.com/SagaSmithAI/SagaSmith-dnd-skills) | D&D 带团工作流 |
-
----
-
-## 不是"创意点子生成器"
-
-大多数 AI 写模组是这样的：你让它"想个冒险"，它给你一段散文式描述，没有结构、没有数值、没有关卡设计。
-
-SagaSmith Module Generator 产出的是**可直接导入跑团的完整模组文件**：
-
-- ✅ D&D importer 可识别的稳定章节、场景与房间 Markdown 标题
-- ✅ 房间级 `####` 子标题 + 类型标注（`room` / `statblock` / `list`）
-- ✅ NPC 全维度：`name / race / class / alignment / want / fear / secret`
-- ✅ 伏笔-回收表 + 势力关系网 + 结局分支
-- ✅ DC 数值 + 怪物数据 + 魔法物品
-- ✅ 可导入的空间证据：编号房间、明确尺寸、连接关系与遭遇上下文
-
----
-
-## 5 种类型 × 25 种范式
-
-| 类型 | 章节 | 默认范式 | 更多范式 | 产出规模 |
-|------|------|----------|----------|----------|
-| 🎯 **One-shot** | 1 | Five-Room Dungeon | Heist, Mystery, Reverse Dungeon | 1 次，3-6h |
-| 📖 **Short** | 3 | Three-Act | Kishōtenketsu, Race Against Time, Island Design | 3-8 次 |
-| 📚 **Medium** | 5 | Hero's Journey | Plot Point, Faction Turn, Fish Tank | 2-4 月战役 |
-| 🏰 **Long** | 8 | Double Triangle | Conspyramid, Megadungeon, Technoir | 6+ 月战役 |
-| 🗺️ **Sandbox** | 4-6 区域 | Hexcrawl | Node-Based, Blorb, Decision-Based | 开放探索 |
-
----
-
-## 生成范式
-
-| 驱动类型 | 范式 | 一句话 |
-|----------|------|--------|
-| 空间 | **Five-Room Dungeon** | 入口守卫 → 谜题/社交 → 陷阱/反转 → Boss → 奖励 |
-| 空间 | **Hexcrawl** | 六角格地图，每格独立遭遇与地点 |
-| 空间 | **Megadungeon** | 多层地城，环形路线，内部派系 |
-| 故事 | **Three-Act** | 建立 → 对抗 → 解决，Ch.2 中场反转 |
-| 故事 | **Hero's Journey** | 平凡世界 → 跨越门槛 → 试炼 → 深渊 → 归来 |
-| 故事 | **Double Triangle** | Ch.1-4 崛起 → Ch.5-6 陨落 → Ch.7-8 救赎 |
-| 故事 | **Kishōtenketsu** | 起承转合，无需反派 |
-| 故事 | **Seven-Point Story** | Hook → PT1 → Pinch1 → Midpoint → Pinch2 → PT2 → Resolution |
-| 玩法 | **Heist** | 情报 → 计划 → 执行 → 意外 → 脱逃 |
-| 玩法 | **Mystery** | Hook → 3 地点 → 每点 3 线索 → 揭示（三线索法则） |
-| 玩法 | **Conspyramid** | 6 层阴谋 + 6 层应对金字塔 |
-| 玩法 | **Faction Turn** | 派系独立于玩家推进 |
-| 玩法 | **Race Against Time** | 限时：X 轮完成 Y 目标 |
-| 角色 | **Plot Point** | 主线章节 + 角色个人线并行 |
-| 角色 | **Fish Tank** | 事件 + 派系已就位，玩家是投入的变量 |
-| 角色 | **Blorb** | 准备实体，不准备情节。Prep > rules > improv |
-| 混合 | **Iceberg Diagram** | 表面钩子 → 隐藏深度 |
-| 混合 | **Reverse Dungeon** | 玩家防守，怪物进攻 |
-
----
-
-## 生成流程
-
-### 单步（One-shot / Short）
-一次性产出完整模组 → 写入文件 → 导入数据库
-
-### 多步（Medium / Long）
-**M1** → 骨架（概要 + 势力 + 章节大纲 + NPC 全维度）→ 用户审核  
-**M2** → 前半章节正文 → 用户审核  
-**M3** → 后半章节 + 附录（伏笔回收表、势力变化、怪物、魔法物品）→ 组装成最终文件
-
-### 沙盒
-**S1** → 世界骨架（区域总览 + 势力网 + 随机遭遇表）  
-**S2-N** → 每个区域独立生成（特征 + 势力 + 事件线 + 地点 × 3-6）
-
-每一步都有用户审核节点——不会在无人确认的情况下推进到下一步，避免幻觉堆积。
-
----
-
-## 平台兼容性
-
-| 平台 | 类型 | Subagent 并行 | 行为 |
-|------|------|:---:|------|
-| **Claude Code** | CLI | ✅ | 完整并行 — `Agent` + `run_in_background` |
-| **NanoBot** | 运行时 | ✅ | 完整并行 — 原生 `spawn` |
-| **Codex (OpenAI)** | CLI | ✅ | 完整并行 — Agent 调度 |
-| **Cursor** | IDE | ✅ | 完整并行 — Agent 模式 |
-| **OpenClaw** | 运行时 | ✅ | 完整并行 — 内置 subagent |
-| **Hermes** | 运行时 | ✅ | 完整并行 — 内置 subagent |
-| **GitHub Copilot** | IDE | ⚠️ | Agent 模式但不够成熟，建议顺序 |
-| **Cline** | IDE | ⚠️ | 部分支持，建议顺序 |
-| **扣子 (Coze)** | 工作流 | ❌ | 纯顺序 — 预定义 pipeline，不支持动态 spawn |
-| **Dify** | 工作流 | ❌ | 纯顺序 — 工作流节点，无法动态 fork |
-| **FastGPT** | 工作流 | ❌ | 纯顺序 |
-| **Aider** | CLI | ❌ | 纯顺序 — 单 agent 架构 |
-| **Continue** | IDE | ❌ | 纯顺序 — 聊天式辅助 |
-| **通义灵码** | IDE | ❌ | 纯顺序 |
-| **Trae (字节)** | IDE | ❌ | 纯顺序（待确认） |
-| **Windsurf (Codeium)** | IDE | ❌ | 纯顺序（待确认） |
-| **WorkBuddy** | IDE | ❌ | 纯顺序（待确认） |
-| **Augment Code** | IDE | ❌ | 纯顺序（待确认） |
-
-> **✅ = 完整并行**：Medium/Long/Sandbox 章节并发生成。One-shot 和 Short 在所有平台上均为单次生成，不受影响。
->
-> **❌ = 顺序回退**：自动退化为 Core Rule 4——逐章生成，用户逐章审查。输出质量完全相同，只是耗时更长。Skill 会自动检测平台能力并静默降级。
->
-> **⚠️ = 部分支持**：有 subagent 但不稳定——默认走顺序模式以确保最佳结果。
-
----
-
-## 快速安装
-
-```bash
-# Claude Code / Codex / Cursor / Copilot
-npx skills add SagaSmithAI/SagaSmith-module-gen-skills
-
-# ClawHub
-npx clawhub install sagasmith-modulegen
-```
-
----
-
----
-
-## 使用示例
-
-### One-shot — 单次冒险
-
-```
-用户: 帮我生成一个 2 级 Halloween 主题 one-shot，
-      用 Five-Room Dungeon 范式，反派是稻草人精魂
-
-Agent:
-✅ 参数确认：One-shot · Five-Room Dungeon
-   主题：万圣节/南瓜田 · 反派：稻草人精魂 (CR 1 × 3)
-   等级：2 · 氛围：恐怖喜剧
-
-[生成完整模组 → modules/pumpkin_horror.md]
-
-输出摘要：
-📜 南瓜田的恐怖 / The Pumpkin Horror
-   Scene 1: 丰收节庆典 (入口守卫 — 失踪儿童事件)
-   Scene 2: 老磨坊的谜语 (谜题 — 稻草人只会说字谜)
-   Scene 3: 活过来的南瓜田 (反转 — 稻草人是受害者)
-   Scene 4: 谷仓 Boss 战 (高潮 — 真正的幕后: 绿鬼婆)
-   Scene 5: 丰收节归来 (奖励 — 村民的感激 + 1 件魔法物品)
-```
-
-### Short — 三幕短战役
-
-```
-用户: 帮我生成一个 5 级沙漠盗墓 short 模组，
-      用 Kishōtenketsu 范式，反派是木乃伊领主
-
-Agent:
-✅ 参数确认：Short (3 Ch) · Kishōtenketsu (起承转合)
-   主题：沙漠/古墓 · 反派：木乃伊领主 + 圣甲虫集群
-   等级：5 · 反转：木乃伊在守护封印更邪恶的东西
-
-[生成 3 章 → 每章 3 场景 → modules/desert_tomb.md]
-
-输出摘要：
-📜 沙海之下的封印
-   第一章「起」— 绿洲商队的委托，三个 NPC 各有秘密
-   第二章「承」— 深入地下金字塔，5 个陷阱房间
-   第三章「转」— 木乃伊并非敌人，真正威胁是封印下的
-                    古老存在。结局分支：释放 / 加固 / 摧毁
-   附录：NPC 全维度 · 4 个伏笔回收 · 木乃伊领主数据
-```
-
-### Medium — 五章战役
-
-```
-用户: 生成一个 medium 模组，7 级都市政治主题，
-      用 Hero's Journey 范式
-
-Agent:
-[Step M1] 骨架生成中...
-   5 章大纲 · 4 个派系 · 12 个 NPC (全部 want/fear/secret)
-   详见 modules/city_of_masks_skeleton.md，请审核。
-
-用户: Ch.2 的反派动机不够强，改成他被勒索
-
-Agent:
-✅ 已调整：议长是被 Zhentarim 用家族秘密勒索的
-
-[Step M2] 前 3 章正文生成中...
-   Ch.1 平凡世界 · Ch.2 跨越门槛 · Ch.3 试炼
-   详见 modules/city_of_masks_ch1-3.md
-
-[Step M3] 后 2 章 + 附录生成中...
-   Ch.4 深渊 · Ch.5 归来
-   伏笔回收表 (5 章全链) · 势力变化时间线 · Boss 三阶段
-   ✅ 最终文件：modules/city_of_masks.md
-```
-
-### Long — 八章史诗
-
-```
-用户: 生成一个 long 模组，1-20 级奇幻史诗，
-      用 Double Triangle 范式
-
-Agent:
-[Step L1] 概念 + 双弧线大纲...
-   反派时间线 (8 章) · 双弧线结构 · Ch.4 假胜利设计
-   Ch.8 多重结局 (4 分支) · 22 个 NPC 含个人弧光
-   详见 modules/the_last_circle_concept.md
-
-[经过 5 步渐进生成...]
-
-✅ 最终模组：modules/the_last_circle.md
-   📊 8 章 · 48 场景 · 22 NPC · 12 伏笔回收链
-   👤 每个 PC 2-3 场景个人线 · Boss 四阶段
-```
-
-### Sandbox — 开放世界
-
-```
-用户: 生成一个沙盒，维京主题群岛探索
-
-Agent:
-[Step S1] 世界骨架...
-   6 个区域 · 3 个派系 · 随机遭遇表 (1d12)
-   详见 modules/viking_isles_world.md
-
-用户: 生成北岛区域
-
-Agent:
-[Step S2] 区域：北岛·霜骨群岛
-   特征：被龙裔部族控制的冻土岛链
-   势力：白霜部族 · 事件线 × 3
-   地点：龙骸港 · 霜语洞穴 · 长老议会厅 · 热泉圣所
-   ✅ 已追加到 modules/viking_isles.md
-```
-
----
-
-## 致谢
-
-- [ackiles/dnd-dm-skill](https://github.com/ackiles/dnd-dm-skill) — D&D DM skill 先驱
-- 25 种范式源自 TRPG 社区数十年的设计积累（Five-Room Dungeon、Three Clue Rule、Hexcrawl 等）
-
----
+| 仓库 | 职责 |
+|---|---|
+| **SagaSmith-module-gen-skills** | 模组设计与 Pack 创作流程 |
+| [SagaSmith-dnd-mcp](https://github.com/SagaSmithAI/SagaSmith-dnd-mcp) | 草稿、证据、最终化、Pack 管理与运行时状态 |
+| [sagasmith-dnd](https://github.com/SagaSmithAI/sagasmith-dnd) | 确定性 D&D 解析、schema 与机械 |
+| [sagasmith-core](https://github.com/SagaSmithAI/sagasmith-core) | 系统无关 Package、来源、文档和持久化原语 |
+| [SagaSmith-dnd-skills](https://github.com/SagaSmithAI/SagaSmith-dnd-skills) | D&D 带团与游玩流程 |
+| [SagaSmith-agent](https://github.com/SagaSmithAI/SagaSmith-agent) | 多渠道 Agent 宿主 |
 
 ## 许可证
 
