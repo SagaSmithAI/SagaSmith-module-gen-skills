@@ -162,6 +162,12 @@ knowledge, and audience-specific narration. Do not pre-reveal secrets through
 summaries or handouts. A source heading or label does not replace runtime
 authorization or audience settlement.
 
+Use only canonical scene visibility: `restricted` for Keeper/DM-only source,
+`group` for an authorized player group, and `public` for openly presentable
+material. System terms are authoring semantics, not extra Core visibility enum
+values. Preserve system scene details under `profile_data` in the compiled
+Scene Atlas.
+
 ## Integration pass
 
 1. Verify every runtime id has one meaning.

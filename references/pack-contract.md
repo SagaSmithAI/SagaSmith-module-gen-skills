@@ -23,6 +23,18 @@ catalog, evidence, and finalization requirements.
 | content.catalogs, content.narrative | Agent decisions | Submit as Package edits |
 | metadata.agent_finalization | MCP from Agent confirmation | Confirm after review |
 
+Final Module scene entries use the exact current Scene Atlas shape. Generic
+visibility is `restricted`, `group`, or `public`; system-only fields such as CoC
+clues, checks, SAN expressions, transitions, and solo node ids live below
+`metadata.profile_data`, never as a fixed top-level Core scene superset. Read
+those values only through the selected system profile.
+
+Each finalized `content_reviews` entry is normalized by the MCP and must target
+an existing Scene Atlas key. It uses exactly one evidence mode: either managed
+visual asset plus 1-based page, or one or more source refs. The accepted review
+also carries the authenticated reviewer and a non-empty observation. Never
+fabricate, partially hand-build, or carry a draft review shape into the Pack.
+
 Campaign ids, runtime character ids, permissions, actor knowledge, scene
 progress, world state, random streams, branches, snapshots, and undo history are
 never portable.
@@ -235,9 +247,12 @@ package_id:
 }
 ~~~
 
-The draft must be mechanically imported. Confirmation contains exactly
-confirmed and note and is bound to the authenticated reviewer. Finalization
-writes an immutable archive and moves the draft to compiled.
+The draft must be mechanically imported. The request confirmation contains
+exactly `confirmed` and `note`; the MCP binds the authenticated reviewer and the
+final Pack stores exactly `confirmed`, `reviewer`, and `note` in
+`metadata.agent_finalization`. Finalization writes an immutable archive and
+moves the draft to compiled. Extra confirmation fields, incomplete Scene Atlas
+evidence, and stale or malformed content reviews are hard failures.
 
 ## Final artifact and optional runtime handoff
 

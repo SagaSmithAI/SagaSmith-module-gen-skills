@@ -28,6 +28,8 @@ Repair source failures before starting the draft.
 - Validation errors are empty.
 - Scene count, chapter assignment, stable keys, and chunk boundaries match the
   source.
+- Every content-bearing scene has a unique stable key, valid source span, and
+  non-empty managed source refs; system semantics are under profile_data.
 - No empty, swallowed, duplicated, or accidentally split scene exists.
 - Runtime-manifest identities and references align with derived scenes.
 - Spatial locations and connections remain conservative.
@@ -56,6 +58,10 @@ heuristic.
 - Narrative contains dossiers and endings arrays.
 - Dependencies have exact kind, id, version, checksum, and optional flag.
 - Metadata contains publication/review decisions, not campaign state.
+- Scene visibility is canonical restricted/group/public; system scene fields
+  are confined to metadata.profile_data.
+- Every accepted content review targets an existing scene and has exactly one
+  evidence mode, an authenticated reviewer, and a non-empty observation.
 
 ### D&D gate
 
@@ -93,6 +99,8 @@ Inspect the artifact through content_pack get and verify:
 - format is sagasmith.content-package, schema_version is 2, kind is module;
 - system_id matches the authoring campaign and pack_id prefix;
 - id, version, manifest identity, checksum, and finalization metadata agree;
+- metadata.agent_finalization contains exactly confirmed=true, reviewer, and
+  note; the Scene Atlas and content_reviews pass the strict final contract;
 - source, asset, review, actor, scene, catalog, dossier, and ending counts are
   plausible;
 - the draft state is compiled;
