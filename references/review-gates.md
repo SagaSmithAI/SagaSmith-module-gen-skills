@@ -1,115 +1,120 @@
 # Module Pack review gates
 
-Run these gates at the named trust boundaries. Block only for authority,
-evidence, identity, portability, or mechanically indispensable failures.
+Run these gates at trust boundaries. Block only for authority, evidence,
+identity, portability, conflicting required truth, or indispensable mechanics.
 
-## Contents
+## Gate A: before module_draft start
 
-- [Gate A: before draft start](#gate-a-before-module_draftstart)
-- [Gate B: after mechanical start](#gate-b-after-mechanical-start)
-- [Gate C: before Package finalization](#gate-c-before-package-finalization)
-- [Gate D: after finalization](#gate-d-after-finalization)
-- [Gate E: optional import and activation](#gate-e-optional-import-and-activation)
-- [Retry rules](#retry-rules)
-
-## Gate A: before `module_draft(start)`
-
+- The authoring campaign's exact system_id and current native schemas are known.
+- The selected profile in [system-profiles.md](system-profiles.md) matches.
 - The source is one UTF-8 Markdown document.
-- Exactly zero or one runtime manifest exists; when present, it is valid JSON v1.
+- Exactly zero or one runtime manifest exists; when present it is valid v1.
 - Runtime ids are lowercase, stable, globally unique, and aligned with prose.
-- `#` chapters, `##` scenes, `###` subsections, and `####` numbered locations form
-  a consistent hierarchy.
-- Scene titles are meaningful and do not rely on repeated generic labels.
-- Essential revelations have viable clue paths.
-- All expected combatants have exact mechanics or are explicitly narrative-only.
-- Dimensions and connections are stated only where authored.
-- The authoring ledger includes Pack identity, classification, editions, play
-  profile, continuity, catalogs, narrative, dependencies, and publication data.
+- Chapter, scene, subsection, and numbered-location headings are coherent.
+- Scene titles are meaningful and stable.
+- Indispensable revelations have viable discovery paths.
+- Executable actors/checks have exact system-valid mechanics.
+- Spatial and chase facts are stated only where sourced.
+- The ledger contains common identity, profile, continuity, catalogs, narrative,
+  dependencies, publication data, and system-specific decisions.
 
-Repair failures in the canonical source before starting the draft.
+Repair source failures before starting the draft.
 
-## Gate B: after mechanical start
+## Gate B: after the mechanical first pass
 
-- The draft has a retained `job_id`, inactive `module_id`, and current revision.
-- State is `imported` before finalization work.
-- Inspection reports the expected parser profile and runtime manifest.
-- Validation is valid; errors are empty.
-- Scene count, chapter assignments, stable keys, and chunk boundaries match the
-  authored design.
-- No empty, swallowed, or accidentally split scenes exist.
-- Spatial locations and connections are conservative.
-- Statblock, OCR, asset, and progress-impact diagnostics have been reviewed.
+- The draft has job_id, inactive module_id, state, and current revision.
+- The state is imported before finalization work.
+- The reported parser profile matches the campaign system.
+- Validation errors are empty.
+- Scene count, chapter assignment, stable keys, and chunk boundaries match the
+  source.
+- No empty, swallowed, duplicated, or accidentally split scene exists.
+- Runtime-manifest identities and references align with derived scenes.
+- Spatial locations and connections remain conservative.
+- Statblock, OCR/transcription, asset, check, and progress-impact diagnostics
+  have been reviewed.
 
-If generated Markdown cannot be repaired through an applicable draft operation,
-repair the canonical source and start a corrected draft rather than adding a
-parser heuristic for that single work.
+If a source cannot be repaired through an applicable draft edit, repair the
+canonical source and start a corrected draft. Do not add a book-specific parser
+heuristic.
 
 ## Gate C: before Package finalization
 
-### Identity and evidence
+### Authority, identity, and evidence
 
-- `pack_id` and version are portable, stable, and intentional.
-- Every required play-profile subsection has a copied evidence receipt.
-- No source key, chunk hash, page, dependency checksum, or actor identity was
-  invented.
-- Every edit used the then-current draft revision and a request-specific
-  idempotency key.
+- pack_id uses the exact system prefix and version is intentional.
+- Every profile field required by the selected system has exact source receipts.
+- No source key, hash, page, dependency checksum, or actor identity was invented.
+- Every edit used the current revision and a request-specific idempotency key.
+- The complete current draft, not an earlier revision, was reviewed.
 
-### Package decisions
+### Common Package decisions
 
-- Manifest contains title, classification, compatibility, play profile,
-  continuity, and activation.
-- Catalog values are arrays; standard groups are present or intentionally empty.
-- Narrative contains both `dossiers` and `endings` arrays.
-- A `campaign` contains at least one reachable ending.
+- Manifest contains title, classification, compatibility, play_profile,
+  continuity, and activation only.
+- Catalog fields match the selected system and every value is an array.
+- Narrative contains dossiers and endings arrays.
 - Dependencies have exact kind, id, version, checksum, and optional flag.
-- Metadata contains publication decisions, not runtime campaign state.
+- Metadata contains publication/review decisions, not campaign state.
 
-### Playability and semantics
+### D&D gate
 
-- Required mechanics are complete and use the intended D&D edition.
-- Clues, secrets, branches, dossiers, handouts, and endings share stable ids.
-- Initial knowers do not imply that player characters know a secret.
-- All endings and persistent consequences remain possibilities until play.
-- Optional portraits, presentation polish, or nonessential card fields do not
-  block an otherwise mechanically complete Pack.
+- compatibility editions, levels, advancement, pregen review, DCs, encounter
+  actors, rewards, spells, and statblocks use the intended D&D edition.
+- Start/end levels, advancement, and pregen review have evidence.
+- Missing party-size advice remains null/unsourced rather than guessed.
+- A campaign has at least one reachable ending.
+
+### CoC gate
+
+- compatibility includes 7e and all six play-profile sections have evidence.
+- investigator and session ranges are valid; ruleset recommendation is supported.
+- classification and solo support agree.
+- All playable scenario/campaign/solo works have a reachable ending.
+- Core clues have viable routes and supplementary clues/check consequences are
+  unambiguous.
+- SAN expressions, pushed-roll stakes, combined-roll requirement, group-Luck
+  intent, chase evidence, tomes/spells, and source statblocks are preserved when
+  present.
+- No D&D level, party-majority, AC, class, or spell-slot assumption leaked in.
 
 ### Confirmation
 
-- The Agent has reviewed the complete current revision.
-- The confirmation note names the reviewed surfaces.
-- No unresolved player choice, missing permission, stale revision, conflicting
-  required evidence, or indispensable mechanic remains.
+- The confirmation note names source, system profile, scenes, mechanics,
+  catalogs, narrative, dependencies, and diagnostics.
+- No unresolved permission, stale revision, conflicting required source fact,
+  or mechanically indispensable field remains.
+- Optional portraits and presentation polish do not block a valid Pack.
 
 ## Gate D: after finalization
 
-Inspect the artifact through `content_pack(get)` and verify:
+Inspect the artifact through content_pack get and verify:
 
-- `format` is `sagasmith.content-package` and `schema_version` is `2`;
-- `kind` is `module` and `system_id` is `dnd5e`;
+- format is sagasmith.content-package, schema_version is 2, kind is module;
+- system_id matches the authoring campaign and pack_id prefix;
 - id, version, manifest identity, checksum, and finalization metadata agree;
 - source, asset, review, actor, scene, catalog, dossier, and ending counts are
   plausible;
-- the draft state is `compiled`;
-- campaign state, permissions, progress, knowledge, random state, branches, and
-  snapshots are absent.
+- the draft state is compiled;
+- campaign ids, permissions, progress, knowledge, random state, branches,
+  snapshots, and undo history are absent.
 
-Build completion ends at this gate unless installation was explicitly requested.
+Build completion ends here unless installation was explicitly requested.
 
 ## Gate E: optional import and activation
 
-- Import exactly one finalized artifact or source path with kind `module`.
-- Verify the imported `module_id`; do not activate the mechanically imported
-  authoring draft.
+- Import exactly one finalized artifact or managed source path.
+- Verify the imported module_id; do not activate the mechanical draft.
 - Refresh the target campaign revision immediately before activation.
 - Review replacement progress impact.
-- Supply explicit, reasoned progress remaps for removed realized scenes; never
-  guess or discard progress.
-- Confirm the resulting active module identity and next legal native call.
+- Supply explicit from_scene_id, to_scene_key, reason remaps for removed realized
+  scenes; never guess or discard progress.
+- Confirm the resulting active identity and next legal native call.
 
 ## Retry rules
 
-- Reuse an idempotency key only for an exact retry of the same request.
-- Use a new key when any payload field changes.
+- Reuse an idempotency key only for an exact retry.
+- Use a new key whenever any payload field changes.
 - Refresh the draft or campaign revision after a stale-revision failure.
-- Do not convert an authorization, evidence, or revision failure into a warning.
+- Do not turn authorization, evidence, system mismatch, or revision failures
+  into warnings.

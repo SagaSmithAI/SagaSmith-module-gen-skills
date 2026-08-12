@@ -1,85 +1,59 @@
-# SagaSmith Module Pack Authoring
+# SagaSmith Module Pack Builder
 
-[English](README.md) | [中文](README-cn.md)
+An AI-native Skill for building reviewed SagaSmith Module Packs with the current
+sagasmith.content-package schema version 2.
 
-<p align="center">
-  <img src="images/SagaSmith.png" alt="SagaSmith" width="180">
-</p>
+The Skill is system-aware. It currently documents and validates authoring
+decisions for:
 
-SagaSmith Module Generator is an AI-native D&D 5e authoring Skill for creating,
-reviewing, and finalizing portable Module Packs under the current
-`sagasmith.content-package` v2 contract.
+- D&D 5e, system_id dnd5e, editions 2014 and 2024;
+- Call of Cthulhu 7e, system_id coc7e, Classic and Pulp profiles.
 
-It produces more than adventure prose. The workflow creates one canonical
-Markdown source, stable runtime identities, structured Pack decisions, exact
-source evidence, an auditable draft history, and one immutable Pack artifact.
+It does not convert one system's manifest into another. The authoring campaign
+selects the system, Core owns the portable Package boundary, the system package
+owns deterministic parsing and validation, MCP owns authoritative draft state,
+and the Agent/Skill owns semantic review.
 
-## Current lifecycle
+## Current workflow
 
-```text
-brief and authoring ledger
-→ canonical Module Markdown + runtime manifest v1
-→ module_draft(start): mechanical first pass
-→ module_draft(evidence/edit): Agent review and repair
-→ module_draft(finalize): immutable Module Pack v2
-→ content_pack(get): final verification and delivery
-```
+~~~text
+canonical source
+  -> module_draft(start)
+  -> module_draft(get/evidence/edit)
+  -> module_draft(finalize)
+  -> content_pack(get)
+  -> optional content_pack(import/activate)
+~~~
 
-Import and activation are deliberately separate:
+The default result is a built immutable artifact. Installation and activation
+are separate explicit operations.
 
-```text
-content_pack(import) → inactive installed Module
-content_pack(activate) → explicit campaign attachment
-```
+## Trust boundary
 
-The default outcome is a finalized portable artifact, not an activated campaign
-module.
+- Never hand-build a final Package descriptor or checksum.
+- Never fabricate evidence receipts, dependency checksums, actor identities, or
+  scene keys.
+- Keep single-book interpretation and repair in the draft evidence/history.
+- Keep campaign state, permissions, progress, knowledge, random streams,
+  snapshots, and branches outside the portable Pack.
+- Keep private and commercial source material local unless lawful distribution
+  is explicitly authorized.
 
-## What the Skill authors
+## Repository contents
 
-- one-shots, bounded adventures, campaigns, and sandboxes;
-- stable entities, secrets, clues, plot nodes, foreshadowing, and branches;
-- chapter, scene, subsection, and numbered-room Markdown structure;
-- sourced party size, levels, advancement, and pregen applicability;
-- item, encounter, hazard, handout, and mechanic catalogs;
-- narrative dossiers, reachable endings, continuity, and dependencies;
-- evidence-backed statblock, asset, and actor review decisions.
+- SKILL.md: canonical operational procedure.
+- references/pack-contract.md: common authoring facade and ownership.
+- references/system-profiles.md: exact D&D and CoC Package decisions.
+- references/source-authoring.md: canonical source and runtime-manifest rules.
+- references/review-gates.md: trust-boundary validation.
+- references/canonical-example.md: current CoC end-to-end example.
+- scripts/validate_skill.py: repository-specific static validator.
 
-Core, D&D, and MCP remain authoritative for scene parsing, source bundles,
-checksums, actor-card validation, immutable archives, revisions, authorization,
-idempotency, and activation.
+## Validation
 
-## Composition patterns
+~~~powershell
+python scripts/validate_skill.py .
+~~~
 
-The Skill includes 25 reusable patterns such as Five-Room Dungeon, Node-Based,
-Hexcrawl, Three-Act, Hero's Journey, Kishōtenketsu, Heist, Mystery,
-Conspyramid, Faction Turn, Fish Tank, and Blorb. Patterns guide design; they do
-not impose Package schema values or mandatory chapter counts.
-
-Large works may delegate chapter or region drafting after the shared ledger is
-frozen. The lead Agent still owns the only runtime manifest, integrates the only
-canonical source, and performs the complete review and finalization sequence.
-
-## Install
-
-```bash
-npx skills add SagaSmithAI/SagaSmith-module-gen-skills
-```
-
-Invoke the Skill as `$sagasmith-modulegen` and provide an adventure brief plus an
-authoring campaign in Lobby when using SagaSmith D&D MCP.
-
-## Ecosystem
-
-| Repository | Role |
-|---|---|
-| **SagaSmith-module-gen-skills** | Module design and Pack authoring procedure |
-| [SagaSmith-dnd-mcp](https://github.com/SagaSmithAI/SagaSmith-dnd-mcp) | Draft, evidence, finalization, Pack management, runtime state |
-| [sagasmith-dnd](https://github.com/SagaSmithAI/sagasmith-dnd) | Deterministic D&D parsing, schemas, and mechanics |
-| [sagasmith-core](https://github.com/SagaSmithAI/sagasmith-core) | System-neutral Package, source, document, and persistence primitives |
-| [SagaSmith-dnd-skills](https://github.com/SagaSmithAI/SagaSmith-dnd-skills) | D&D play and DM procedures |
-| [SagaSmith-agent](https://github.com/SagaSmithAI/SagaSmith-agent) | Multi-channel Agent host |
-
-## License
-
-Apache-2.0
+The repository is licensed under Apache License 2.0. Source modules and generated
+Packs retain their own licenses and distribution constraints.

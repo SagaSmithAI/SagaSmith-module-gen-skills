@@ -9,6 +9,7 @@ REQUIRED_FILES = {
     "SKILL.md",
     "agents/openai.yaml",
     "references/pack-contract.md",
+    "references/system-profiles.md",
     "references/source-authoring.md",
     "references/narrative-patterns.md",
     "references/review-gates.md",
@@ -22,6 +23,8 @@ LEGACY_MARKERS = {
     "dnd_module",
     'action="stage"',
     'action="ingest"',
+    "portable D&D 5e Module Packs",
+    "Core and D&D derive",
 }
 
 REQUIRED_SKILL_MARKERS = {
@@ -29,8 +32,11 @@ REQUIRED_SKILL_MARKERS = {
     "content_pack",
     "sagasmith.content-package",
     "references/pack-contract.md",
+    "references/system-profiles.md",
     "references/source-authoring.md",
     "references/review-gates.md",
+    "dnd5e",
+    "coc7e",
 }
 
 
@@ -109,6 +115,23 @@ def main() -> None:
     ):
         if marker not in metadata:
             fail(f"agents/openai.yaml: missing or stale interface marker: {marker}")
+    for stale in ("reviewed D&D Module Packs", "D&D Module Pack from"):
+        if stale in metadata:
+            fail(f"agents/openai.yaml: stale single-system interface text: {stale}")
+
+    profiles = (root / "references" / "system-profiles.md").read_text(
+        encoding="utf-8-sig"
+    )
+    for marker in (
+        "## D&D 5e: dnd5e",
+        "## Call of Cthulhu 7e: coc7e",
+        "investigator_count",
+        "estimated_sessions",
+        "starting_level",
+        "expected_end_level",
+    ):
+        if marker not in profiles:
+            fail(f"references/system-profiles.md: missing current profile marker: {marker}")
 
     print(
         f"validated canonical skill: {line_count} SKILL.md lines, "

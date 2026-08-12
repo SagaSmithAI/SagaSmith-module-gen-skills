@@ -1,186 +1,174 @@
 # Module source authoring
 
-Use this reference to create the single Markdown source consumed by the D&D
-module parser. This file describes authoring discipline, not a second Package
-schema.
-
-## Contents
-
-- [Document hierarchy](#document-hierarchy)
-- [Runtime manifest v1](#runtime-manifest-v1)
-- [Scene content contract](#scene-content-contract)
-- [Spatial evidence](#spatial-evidence)
-- [Secrets, knowledge, and visibility](#secrets-knowledge-and-visibility)
-- [Integration pass for large works](#integration-pass-for-large-works)
+Create the one UTF-8 Markdown source consumed by the selected system's module
+profile. This is authoring discipline, not a second Package schema.
 
 ## Document hierarchy
 
-Use one canonical UTF-8 document:
+Use a stable generated hierarchy:
 
-```markdown
-# Chapter One: The Broken Lantern
+~~~markdown
+# Chapter or major section
 
-Chapter overview and operating context.
+Operating context.
 
-## Arrival at the Vault
+## Playable scene
 
-Scene purpose, sensory details, actors, choices, clues, and consequences.
+Situation, evidence, actors, choices, mechanics, and consequences.
 
-### Encounter
+### Scene subsection
 
-Use a subsection for material inside the scene.
+Clue, check, handout, encounter, hazard, or Keeper/DM note.
 
-#### A1. Gatehouse
+#### A1. Numbered room, location, or source node
 
-Use a numbered room or location heading for spatial evidence.
-```
+Source-backed spatial or node evidence.
+~~~
 
-The current D&D profile normally selects `##` headings as scenes. It may promote
-`###` or `####` in source books with a dominant deeper hierarchy, but generated
-content must use the stable hierarchy above. Avoid empty headings and repeated
-generic scene names such as `Encounter` or `Room`.
+Generated content should use level-two scene headings. A system profile may
+recognize deeper source hierarchies during import, but do not imitate irregular
+book extraction in new content. Avoid empty headings and repeated generic names.
 
-The compiler derives scene stable keys from the complete heading path and
-disambiguates repeats. Treat heading renames as identity changes that may require
-explicit progress remaps when replacing an active Pack.
+The compiler derives stable scene keys from heading paths. Treat a semantic
+heading rename as an identity change and review progress remaps when replacing
+an active Pack.
 
 ## Runtime manifest v1
 
-Place at most one manifest near the beginning of the final Markdown:
+Place zero or one manifest near the beginning:
 
-```markdown
+~~~markdown
 <!-- sagasmith-runtime-manifest
 {
   "schema_version": 1,
-  "module_key": "lantern-vault",
+  "module_key": "lantern-case",
   "entities": [
-    {
-      "id": "npc:lantern-keeper",
-      "kind": "npc",
-      "name": "Lantern Keeper"
-    }
+    {"id": "npc:caretaker", "kind": "npc", "name": "The Caretaker"}
   ],
   "secrets": [
     {
-      "id": "secret:lower-seal",
-      "truth": "The lower seal contains an imprisoned herald.",
-      "initial_knowers": ["npc:lantern-keeper"]
+      "id": "secret:sealed-room",
+      "truth": "The cellar wall conceals a sealed room.",
+      "initial_knowers": ["npc:caretaker"]
     }
   ],
   "clues": [
     {
-      "id": "clue:inverted-runes",
-      "truth_ref": "secret:lower-seal",
-      "source_scene": "chapter-one-the-broken-lantern-arrival-at-the-vault",
-      "trigger": "inspect the inverted gate runes",
-      "consequences": ["the inspecting actor may learn the seal was built inward"]
+      "id": "clue:misaligned-bricks",
+      "truth_ref": "secret:sealed-room",
+      "source_scene": "chapter-one-arrival",
+      "trigger": "inspect the cellar wall",
+      "consequences": ["the investigator can locate the concealed opening"]
     }
   ],
   "plot_nodes": [
     {
-      "id": "plot:open-lower-vault",
-      "trigger": "break or restore the lower seal",
-      "consequences": ["change access to the lower vault"],
-      "failure_clock": {
-        "segments": 4,
-        "advance_when": "the party completes a rest without securing the gate"
-      }
+      "id": "plot:open-room",
+      "trigger": "open the sealed room",
+      "consequences": ["change access to the hidden chamber"]
     }
   ],
   "foreshadowing": [
     {
-      "id": "foreshadow:cold-flame",
-      "setup": "the gate lantern burns without heat",
-      "payoff": "the imprisoned herald bears the same flame"
+      "id": "foreshadow:cold-draft",
+      "setup": "a cold draft crosses the cellar",
+      "payoff": "the air comes from the hidden chamber"
     }
   ],
   "branches": [
     {
-      "id": "branch:parley-with-keeper",
-      "trigger": "offer to restore the seal before entering",
-      "consequences": ["unlock the keeper's ritual assistance"]
+      "id": "branch:trust-caretaker",
+      "trigger": "share the evidence with the caretaker",
+      "consequences": ["unlock the caretaker's testimony"]
     }
   ]
 }
 -->
-```
+~~~
 
-The recognized collections are:
+Recognized collections are entities, secrets, clues, plot_nodes,
+foreshadowing, and branches. Keep ids lowercase and globally unique. Current
+validation requires:
 
-```text
-entities, secrets, clues, plot_nodes, foreshadowing, branches
-```
+- schema_version equal to 1 and a stable lowercase module_key;
+- every present collection to be an array;
+- every entry to be an object with a stable lowercase id;
+- secrets.initial_knowers to be an array when present;
+- clues, plot_nodes, and branches to have a trigger;
+- plot_nodes.consequences and branches.consequences to be arrays.
 
-Keep all ids lowercase and globally unique. The current validator requires:
+Reuse ids only while their meanings remain the same. The runtime manifest
+records possibilities and semantic identity; it does not grant knowledge,
+advance progress, realize branches, or write campaign continuity.
 
-- `schema_version` equal to `1`;
-- a stable lowercase `module_key`;
-- every collection to be an array when present;
-- every entry to be an object with a stable lowercase `id`;
-- `secrets[].initial_knowers` to be an array when present;
-- `clues`, `plot_nodes`, and `branches` to have a trigger;
-- `plot_nodes[].consequences` and `branches[].consequences` to be arrays.
+## Common scene contract
 
-Use the same ids in dossiers, catalogs, handouts, endings, and prose. Keep an id
-when its meaning survives a revision; create a new id when its meaning changes.
-
-The runtime manifest records module possibilities and semantic identities. It
-does not grant knowledge, advance a clock, realize a branch, set scene ACLs, or
-write campaign continuity.
-
-## Scene content contract
-
-For every playable scene, state enough information for a DM to run it:
+For every playable scene, state:
 
 - purpose and situation on arrival;
-- participating NPCs and their immediate goals;
-- sensory evidence separated from hidden truth;
-- likely actions, checks, and consequences without requiring one solution;
-- clues with redundant discovery paths where the plot depends on them;
-- transitions to other scenes and what changes if the party delays;
-- encounter composition, tactics, retreat, and surrender behavior when combat is
-  expected;
-- rewards and persistent effects as possibilities, not already-realized facts.
+- participating NPCs and immediate goals;
+- immediately perceivable evidence separately from hidden truth;
+- likely actions and system-valid checks with consequences;
+- redundant discovery paths for indispensable revelations;
+- transitions and delay/escalation effects;
+- encounter or chase composition when mechanically executable;
+- persistent effects and endings as possibilities, not realized state.
 
-Use canonical D&D terminology and mechanics. Include an exact statblock or bind a
-validated actor when mechanical execution requires one. Do not invent a partial
-statblock and expect MCP to complete it from narrative context.
+Include exact source-backed mechanics or bind an already validated actor. Never
+invent a partial statblock and expect MCP to infer the missing rules.
+
+## D&D authoring
+
+Use canonical 2014/2024 terminology for the selected edition. Review levels,
+advancement, DCs, encounter actors, rewards, spells, and exact statblocks.
+Describe tactics, retreat, and surrender when combat is expected. Keep
+unresolved geometry as Agent-facing evidence and let runtime choose grid or
+Agent spatial mode.
+
+## CoC authoring
+
+Use source-preserving CoC 7e terminology:
+
+- Mark Core Clue and Clue subsections clearly, but do not make heading labels
+  alone grant knowledge.
+- State what is found automatically, what additional information a successful
+  roll reveals, and what a failed or pushed roll can cost.
+- State difficulty only when the source establishes regular, hard, or extreme.
+- For a combined roll, state the traits and whether any or all must succeed.
+- For group Luck, identify eligible present investigators but leave the
+  lowest-Luck actor and tied selection to authoritative runtime state.
+- Record SAN loss as exact success/failure expressions and preserve trigger
+  context. Do not convert it into already-applied loss.
+- Preserve exact NPC/creature values, chase evidence, tomes, spells, handouts,
+  and Classic/Pulp distinctions. Mark absent mechanics unknown rather than
+  completing them from genre expectations.
+- For solo works, preserve numeric node headings and authored transitions.
+
+The CoC parser may recognize investigation, combat, chase, social, travel,
+handout, reference, and solo-node scenes plus clue, SAN, NPC, creature, and
+timeline subsections. Treat parser output as a mechanical first pass that the
+Agent must review against source evidence.
 
 ## Spatial evidence
 
-Use numbered `####` headings for actual rooms or locations. State dimensions,
-doors, routes, elevation, cover, obstructions, and hazards only when authored.
-Do not infer a tactical grid from narrative adjacency or draw connections merely
-because headings are consecutive.
-
-The Pack stores source spatial evidence. Runtime combat still chooses either:
-
-- `grid`, with an authoritative compiled temporary map and coordinates; or
-- `agent`, with no synthetic coordinates and explicit Agent spatial rulings.
+State dimensions, routes, doors, elevation, obstruction, cover, hazards, or
+chase connections only where authored. Do not infer a tactical map from
+narrative adjacency or consecutive headings.
 
 ## Secrets, knowledge, and visibility
 
-Distinguish:
+Distinguish authored truth, initial authored knower, runtime discovered
+knowledge, and audience-specific narration. Do not pre-reveal secrets through
+summaries or handouts. A source heading or label does not replace runtime
+authorization or audience settlement.
 
-- authored truth: what the Module says can be true;
-- initial knower: an authored entity that begins with the secret in the Module;
-- discovered knowledge: an actor-specific runtime fact created only in play;
-- public narration: an Agent decision made for the actual audience.
+## Integration pass
 
-Do not pre-reveal secrets through handouts or summaries. Current generated D&D
-scenes default to `keeper` when the parser supplies no visibility metadata, and
-the public Package decision edit does not directly replace the derived
-`scene_atlas`. Do not claim that a Markdown label changes scene authorization.
-
-## Integration pass for large works
-
-After merging delegated sections:
-
-1. Verify every runtime id occurs with one meaning.
-2. Resolve repeated chapter and scene headings.
+1. Verify every runtime id has one meaning.
+2. Resolve repeated chapter/scene headings.
 3. Verify each scene's incoming and outgoing state.
-4. Verify every essential clue has viable discovery routes.
-5. Verify faction clocks and failure clocks agree across chapters.
-6. Verify dossiers and endings use current ids.
-7. Verify statblocks, DCs, rewards, and level expectations are coherent.
-8. Regenerate the one canonical source; do not concatenate separate manifests.
+4. Verify every indispensable revelation has viable routes.
+5. Reconcile clocks, factions, chases, branches, and endings across chapters.
+6. Verify dossiers, catalogs, handouts, and endings use current ids.
+7. Verify system mechanics against the selected profile and source.
+8. Produce one canonical source and one runtime manifest.

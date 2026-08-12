@@ -1,93 +1,114 @@
 ---
 name: sagasmith-modulegen
-description: "Create, revise, review, and finalize portable D&D 5e Module Packs for the current SagaSmith content-package v2 authoring contract. Use for one-shots, adventures, campaigns, sandboxes, generated module revisions, or evidence-bound module publication through module_draft and content_pack."
+description: "Create, revise, review, and finalize portable SagaSmith Module Packs for the current sagasmith.content-package v2 contract through a system MCP. Use for D&D 5e or Call of Cthulhu 7e one-shots, scenarios, adventures, campaigns, solo modules, sandboxes, source revisions, and evidence-bound publication through module_draft and content_pack."
 ---
 
 # SagaSmith Module Pack Authoring
 
-Create one reviewed D&D source artifact, use `module_draft` as the only editable
-workspace, and deliver one immutable `sagasmith.content-package` v2 Module Pack.
-Treat Pack installation and campaign activation as optional operations outside
-the default build result.
+Build one reviewed source artifact for the active SagaSmith system, use
+`module_draft` as the only editable Pack workspace, and deliver one immutable
+`sagasmith.content-package` schema-v2 Module Pack. Treat installation and
+campaign activation as separate optional outcomes.
 
 ## Load the relevant references
 
-- Read [pack-contract.md](references/pack-contract.md) before preparing Pack
-  decisions or calling `module_draft`.
+- Read [pack-contract.md](references/pack-contract.md) before preparing Package
+  decisions or calling authoring tools.
+- Read [system-profiles.md](references/system-profiles.md) before choosing
+  classification, compatibility, play-profile, catalog, or mechanical fields.
 - Read [source-authoring.md](references/source-authoring.md) before writing or
-  revising the Module Markdown and runtime manifest.
-- Read [narrative-patterns.md](references/narrative-patterns.md) only when
-  selecting an adventure structure or scaling a long work.
-- Read [review-gates.md](references/review-gates.md) before mechanical import,
+  revising Module Markdown and its runtime manifest.
+- Read [review-gates.md](references/review-gates.md) before draft start,
   finalization, and optional activation.
-- Read [canonical-example.md](references/canonical-example.md) when an exact
-  end-to-end call shape is useful.
+- Read [narrative-patterns.md](references/narrative-patterns.md) only when
+  selecting a composition pattern or scaling a long work.
+- Read [canonical-example.md](references/canonical-example.md) when an exact CoC
+  end-to-end call sequence is useful.
 
 ## Keep one authority for each concern
 
-- Own story meaning, source interpretation, stable semantic ids, Pack decisions,
-  and final confirmation as the Agent.
-- Let Core and D&D derive source bundles, scene boundaries, stable scene keys,
-  chunks, assets, content reviews, actors, checksums, and the final descriptor.
-- Let MCP own draft revisions, idempotency, authorization, immutable archives,
-  import, activation, and progress remaps.
-- Never hand-build a final Package descriptor, checksum, blob path, source
-  receipt, actor card, or scene atlas.
-- Never copy unrealized possibilities, secrets, endings, or future branches into
-  CampaignMemory. Persist only outcomes that play actually realizes.
+- Own source interpretation, story meaning, semantic ids, Package decisions,
+  source repair, and final confirmation as the Agent.
+- Let Core own portable identity, sources, chunks, assets, reviews, checksums,
+  archives, revisions, and transactions.
+- Let the active system package own deterministic parsing, canonical mechanics,
+  actor schemas, system-specific manifest validation, and Pack compilation.
+- Let MCP own authenticated state, authorization, random streams, idempotency,
+  draft revisions, immutable archives, installation, activation, and progress
+  remaps.
+- Never hand-build a final descriptor, checksum, blob path, source receipt,
+  actor card, or scene atlas.
+- Never promote one book's extraction or interpretation problem into Core, a
+  system parser, or MCP. Record it in that draft's evidence and audit history.
+- Never copy unrealized secrets, endings, or future branches into runtime
+  campaign memory. Persist only outcomes realized during play.
 
-## 1. Preflight the authoring session
+## 1. Bind the current system contract
 
-1. Confirm that the native tool list exposes `module_draft` and `content_pack`
-   with the actions documented in [pack-contract.md](references/pack-contract.md).
-2. Require Lobby phase and an authenticated campaign Owner or DM. Use the host-
-   bound principal; do not invent or request a model-supplied identity.
-3. Select an existing authoring campaign. Create one only when the user asks or
-   when the surrounding workflow already authorizes campaign creation.
-4. Default to **build only**. Do not import into another campaign or activate the
-   result unless the user explicitly requests that additional outcome.
-5. If the native schema differs from the bundled contract, stop and report the
-   drift. Do not guess a compatibility path.
+1. Confirm the native tool list exposes `module_draft` and `content_pack`.
+2. Require Lobby phase and a host-bound authenticated campaign Owner or Keeper/
+   DM. Never accept a model-supplied principal id.
+3. Read the authoring campaign and bind its exact `system_id`. Never infer the
+   system from genre, title, filename, or prose.
+4. Select the matching profile in
+   [system-profiles.md](references/system-profiles.md). This Skill currently
+   documents `dnd5e` and `coc7e`; reject any unsupported system rather than
+   borrowing another system's fields.
+5. Compare the native input schema and capability response with the bundled
+   contract. Treat the live server as authoritative and stop on material drift.
+   Do not invent a compatibility path or call a fixed-superset fallback.
+6. Default to **build only**. Create a campaign, install a Pack, or activate it
+   only when the surrounding request authorizes that distinct state change.
 
-## 2. Establish the authoring ledger
+## 2. Establish one authoring ledger
 
-Record these decisions before drafting prose:
+Record common decisions before expanding prose:
 
-- portable `pack_id`, semantic `version`, title, language, license, attribution;
-- classification (`adventure` or `campaign`), supported D&D editions, and exact
-  Pack dependencies when any;
-- sourced party-size range, start/end levels, advancement modes, and
-  pregenerated-character applicability;
-- continuity series/order/state policy and activation policy;
-- chapter and scene plan with unique, stable semantic headings;
+- exact `system_id`, portable `pack_id`, semantic version, title, language,
+  license, attribution, and dependency identities;
+- system-valid classification, compatibility, required capabilities, play
+  profile, continuity, and activation policy;
+- chapter and scene plan with stable semantic headings;
 - entities, secrets, clues, plot nodes, foreshadowing, branches, factions, and
   endings with stable lowercase ids;
-- standard catalog groups: items, encounters, hazards, handouts, and mechanics;
-- narrative dossiers and reachable endings.
+- every required catalog array and both narrative arrays;
+- source evidence needed for every mechanically required profile decision;
+- private/copyright status and which artifacts must remain local.
 
-Treat one-shot, short, medium, long, and sandbox as composition profiles, not
-Pack schema values. Use `adventure` for bounded playable works. Use `campaign`
-only for a continuing work with at least one explicit ending.
+Then add the exact system ledger:
+
+- For `dnd5e`, record editions, start/end levels, advancement, pregen review,
+  optional party-size guidance, encounter mechanics, and exact statblocks.
+- For `coc7e`, record 7e compatibility, investigator count, Classic/Pulp
+  support, era, session estimate, pregen review, solo support, clues, handouts,
+  SAN effects, Mythos tomes/spells, chases, and source-preserving statblocks.
+
+Use composition labels such as one-shot, short, long, or sandbox only for
+authoring cadence. Use only the selected system's Package classifications.
 
 ## 3. Design before expanding
 
-1. Build a scene graph showing entrances, discoveries, consequential choices,
-   failure paths, and endings.
-2. Give every required revelation multiple reasonable discovery paths when the
-   design depends on player discovery.
-3. Separate standard D&D mechanics from module-specific prose. Use canonical
-   mechanics and exact statblocks where required; do not make narrative-only
-   actors mechanically executable.
-4. Define what each faction and important NPC wants, fears, knows, and does if
-   the party does nothing.
-5. Keep unresolved narrative geometry as Agent-facing guidance. State dimensions
-   and connections only when the authored source explicitly establishes them.
-6. Review the ledger with the user before expanding a medium, long, or sandbox
-   work when user review is available.
+1. Build a scene graph with entrances, available evidence, consequential
+   choices, failure paths, persistent consequences, and reachable endings.
+2. Give every indispensable revelation multiple reasonable discovery paths.
+   A failed check may alter cost, time, risk, or detail; it must not erase the
+   only route through a mystery.
+3. Separate standard system mechanics from module-specific meaning. Use exact
+   validated mechanics where execution requires them and keep narrative-only
+   actors explicitly non-executable.
+4. Define each important NPC or faction's wants, fears, knowledge, response
+   posture, and default action if players do nothing.
+5. Record spatial facts only when the source establishes them. Do not synthesize
+   maps or geometry from adjacency.
+6. For CoC, distinguish obvious clues, roll-gated supplementary information,
+   pushed-roll consequences, SAN triggers/loss expressions, and Keeper-only
+   truth. Never turn investigation into a D&D-style majority group check.
+7. Review the ledger with the user before expanding medium, long, campaign, or
+   sandbox works when user review is available.
 
 ## 4. Author one canonical source
 
-Write one UTF-8 Markdown source using this hierarchy:
+Write one UTF-8 Markdown document:
 
 ```markdown
 <!-- sagasmith-runtime-manifest
@@ -96,117 +117,127 @@ Write one UTF-8 Markdown source using this hierarchy:
 # Chapter
 ## Scene
 ### Scene subsection
-#### A1. Numbered room or location
+#### A1. Numbered room, location, or source section
 ```
 
-Follow [source-authoring.md](references/source-authoring.md). In particular:
+Follow [source-authoring.md](references/source-authoring.md):
 
 - include at most one valid runtime manifest;
 - keep ids globally unique and stable across revisions;
-- use `#` for chapters, `##` for scenes, `###` for subsections, and `####` for
-  numbered rooms or locations;
-- avoid repeated generic scene titles that produce unstable revision mapping;
-- keep secrets and DM preparation in the authored source without claiming that
-  Markdown can set scene ACLs; current D&D scenes default to `keeper` when the
-  parser provides no visibility metadata;
-- place player-facing portable material in the handouts catalog rather than
-  promising unsupported scene-visibility editing.
+- use meaningful headings and avoid repeated generic titles;
+- keep authored truth separate from discovered actor knowledge and public
+  narration;
+- put player-facing portable material in the handouts catalog without claiming
+  that prose labels grant runtime access;
+- include exact source-backed mechanics or mark the content narrative-only;
+- integrate all sections into one source before starting a draft.
 
-Before starting the draft, integrate all sections into this one source and run
-the source gate from [review-gates.md](references/review-gates.md).
+Run Gate A from [review-gates.md](references/review-gates.md).
 
 ## 5. Scale composition without splitting authority
 
-For a small adventure, draft and integrate directly. For a large work, optionally
-delegate independent chapter or region bodies after freezing the ledger.
+Draft small works directly. For large works, delegation is optional only after
+freezing the ledger.
 
-When delegating:
+When delegation is available:
 
-- give each worker only its assigned ids, scene contract, global constraints,
-  incoming state, and required outgoing state;
+- give each worker assigned ids, incoming state, required outgoing state, scene
+  contract, system profile, and global constraints;
 - prohibit workers from calling MCP, finalizing Packs, inventing dependencies,
   or creating separate runtime manifests;
-- have the lead Agent merge all sections, resolve duplicate ids and headings,
-  verify transitions and clues, and produce the single canonical source;
-- use sequential drafting when delegation is unavailable. Do not maintain a
-  platform capability matrix inside this Skill.
+- make the lead Agent merge the work, resolve duplicate ids/headings, verify
+  clue routes and transitions, and produce the single canonical source.
+
+Use sequential drafting when delegation is unavailable.
 
 ## 6. Start the editable draft
 
-Call `module_draft(action="start")` once the generated source is internally
-coherent. Supply either `source_path` or generated `name+content`, never both.
-For generated work, normally supply `name`, complete `content`, `title`, and a
-stable `source_key`.
+Call `module_draft(action="start")` only after the canonical source passes its
+authoring gate. Supply either `source_path` or generated `name+content`, never
+both. Generated work normally includes `name`, complete `content`, `title`,
+and stable `source_key`.
 
-Use one stable idempotency key for the exact start request. Retain the returned
-`job_id`, state, draft revision, inspection, validation, and inactive
-`module_id`. A successful start performs the mechanical first pass and normally
-returns an `imported` editable draft.
+Use one idempotency key for the exact request. Retain `job_id`, inactive
+`module_id`, state, revision, inspection, validation, and parser profile. A
+successful first pass normally reaches `imported`.
 
-If validation fails, repair the canonical source from diagnostics and start a
-new corrected draft. Do not weaken the parser or fabricate evidence to preserve
-one failed generated attempt.
+If the first pass is interrupted, resume only through the documented
+`edit:advance` operation. If validation fails, repair the canonical source or
+an applicable draft field from evidence. Do not add a single-book parser
+heuristic or weaken validation.
 
-## 7. Review from exact evidence
+## 7. Review and repair from exact evidence
 
-1. Use `module_draft(action="get")` to refresh the current draft before writing.
-2. Use `module_draft(action="evidence", kind="chunks")` to read exact managed
-   evidence and obtain source receipts.
-3. Copy returned source receipts verbatim into sourced Pack decisions. Never
-   invent a `chunk_hash`, page, source key, or citation.
-4. Review the derived scene index, runtime-manifest advisories, source chunks,
-   statblocks, assets, and progress-impact diagnostics.
-5. Apply only current draft edits:
-   - `source_text` for evidence-backed staged-PDF transcription repair;
+1. Refresh with `module_draft(action="get")`.
+2. Read managed chunks with `module_draft(action="evidence", kind="chunks")`.
+3. Copy returned evidence receipts verbatim. Never invent a source key, page,
+   chunk hash, dependency checksum, or actor identity.
+4. Review scene boundaries, runtime-manifest advisories, chunks, statblocks,
+   assets, OCR/transcription diagnostics, checks, and progress impact.
+5. Apply the narrowest valid edit:
+   - `source_text` for evidence-backed staged-source transcription repair;
    - `content` or `statblock` for reviewed structured content;
    - `asset` for managed source assets;
    - `actor` for already validated actor bindings;
    - `package` for manifest, catalogs, narrative, dependencies, metadata, or
      version decisions;
-   - `advance` to rerun the mechanical path after an applicable repair.
-6. Pass the latest `expected_revision` and a request-specific idempotency key on
-   every write. Refresh the revision after every successful edit.
-7. Record a concise note for each package decision so the final Pack preserves
-   an auditable edit history.
+   - `advance` to resume the mechanical first pass.
+6. Pass the latest `expected_revision` and a request-specific idempotency key
+   for every write. Refresh after every successful edit.
+7. Record a concise evidence/ruling note for every semantic decision.
 
-Do not treat warnings as automatic blockers. Resolve or record warnings that
-affect identity, source binding, scene structure, mechanics, required play
-profile facts, or portability. Keep advisory presentation issues non-blocking.
+Resolve errors that affect identity, evidence, required mechanics, source
+binding, scene structure, or portability. Treat optional presentation fields,
+portraits, and advisory readiness as non-blocking.
 
-## 8. Finalize the immutable Pack
+## 8. Save exact system Package decisions
 
-Run every finalization gate in [review-gates.md](references/review-gates.md).
-Then call `module_draft(action="finalize")` with the current `job_id`, portable
-`pack_id`, final version if not already saved, and explicit Agent confirmation.
+Submit only these common Package decision areas through
+`module_draft(action="edit", operation="package")`:
 
-Write a confirmation note that states what was reviewed. Never confirm a draft
-with unresolved required evidence, invalid mechanics, missing campaign endings,
-or unknown Pack dependencies. Omit `include_package` unless the caller truly
-needs the full descriptor in the response; the archive is the normal handoff.
+`manifest`, `catalogs`, `narrative`, `dependencies`, `metadata`, and
+`version`.
 
-Finalization must return a `compiled` draft and an immutable Pack artifact.
-Inspect that artifact with `content_pack(action="get", kind="module")` and verify
-identity, schema, checksum, finalization metadata, and component counts.
+The manifest must contain exactly the common semantic fields documented in
+[pack-contract.md](references/pack-contract.md), while its classification,
+compatibility, play profile, and catalogs must match the selected system profile
+exactly. Do not send D&D fields to CoC or CoC fields to D&D.
 
-## 9. Deliver, then optionally install
+All required CoC play-profile sections require real source receipts. D&D
+requires sourced start/end levels, advancement, and pregen review; party-size
+guidance is optional. Use exact current dependencies or an empty array.
+
+## 9. Finalize the immutable Pack
+
+Run Gate C, then call `module_draft(action="finalize")` with the current
+`job_id`, system-prefixed portable `pack_id`, final version, and explicit
+Agent confirmation.
+
+The confirmation note must name the reviewed surfaces. Never confirm unresolved
+required evidence, invalid mechanics, missing required endings, unknown
+dependencies, stale revisions, or conflicting source truth.
+
+Require a `compiled` draft and immutable artifact. Inspect it with
+`content_pack(action="get", kind="module")` and verify schema-v2 identity,
+system, checksum, finalization metadata, source binding, and component counts.
+
+## 10. Deliver, then optionally install
 
 Report:
 
-- artifact handle, Pack id, version, system, schema, and checksum;
+- artifact handle, Pack id, version, `system_id`, schema, and checksum;
 - source key/checksum and final draft job/revision;
 - scene, asset, review, actor, catalog, dossier, and ending counts;
-- material warnings and the Agent finalization note;
-- whether the Pack is only built, imported, or active.
+- material warnings, local/private handling, and finalization note;
+- whether the result is built only, imported, or active.
 
-Stop after delivering the artifact by default.
+Stop at the built artifact by default.
 
-When the user explicitly requests installation, call
-`content_pack(action="import", kind="module")` with the artifact. Import remains
-inactive. When the user also explicitly requests activation, refresh the target
-campaign revision and call `content_pack(action="activate", kind="module")` on
+When installation is explicitly requested, call
+`content_pack(action="import", kind="module")`; import remains inactive. When
+activation is also requested, refresh the target campaign revision and activate
 the imported `module_id`.
 
-For a replacement revision, review progress impact and supply only explicit
+For a replacement, review progress impact and supply only explicit
 `from_scene_id` to `to_scene_key` remaps with reasons. Never activate the
-mechanically imported draft module directly, guess a remap, or silently discard
-realized progress.
+mechanical draft, guess a remap, or discard realized progress.
