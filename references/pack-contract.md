@@ -1,8 +1,9 @@
-# Current Module Pack contract
+# Current Content Pack contract
 
 Use this reference for the common authoring protocol. The authoritative artifact
-is sagasmith.content-package schema version 2, kind module. The campaign and
-active MCP determine system_id; never choose it from source prose.
+is sagasmith.content-package schema version 2, normally kind module and, where
+the native system supports it, kind core_rules. The campaign and active MCP
+determine system_id; never choose it from source prose.
 
 Read [system-profiles.md](system-profiles.md) for system-specific manifest,
 catalog, evidence, and finalization requirements.
@@ -32,8 +33,13 @@ Use only:
 
 ~~~text
 module_draft(start|get|evidence|edit|finalize)
+rulebook_draft(start|get|evidence|finalize)
 content_pack(list|get|import|export|activate|deactivate|remove)
 ~~~
+
+Choose exactly one draft authority. module_draft owns scene/module authoring;
+rulebook_draft owns reviewed rule-source ingestion. Never convert a rulebook
+into a fake module merely to reuse scene fields.
 
 Authoring writes require Lobby, a host-bound authorized principal, a stable
 idempotency key, and the latest applicable revision. The semantic facade is
@@ -243,3 +249,26 @@ Import explicitly with exactly one artifact or managed source path. Import
 remains inactive. Activate only after refreshing the target campaign revision.
 When replacing an active revision, use progress remaps only as exact objects
 containing from_scene_id, to_scene_key, and reason after reviewing impact.
+
+## Core rules Pack branch
+
+Follow the live native schema; the current CoC facade uses campaign_id and
+action at top level with operation fields in data.
+
+1. rulebook_draft start one managed PDF/Markdown/text source with source_path,
+   source_key, and title.
+2. Use evidence search to review representative rules and normalization before
+   finalization.
+3. Finalize the current draft revision with package_id, version, title, and an
+   explicit confirmation object. A portable CoC id uses the coc7e.rules.
+   prefix.
+4. Inspect/import through content_pack with kind core_rules. Import remains
+   inactive; activation is a separate guarded campaign write.
+5. Verify the active lock and retrieved source through rule_query
+   sources/search/expand/effective.
+
+The rules compiler binds reviewed Core sources and checksums; it does not infer
+book-specific meaning. Store interpretation decisions in reviewed Pack
+artifacts/mechanics when the live schema supports them, not in Core parsing
+heuristics. Do not include campaign state, module scenes, runtime actors, or
+private source text in distributable metadata.

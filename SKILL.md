@@ -1,14 +1,14 @@
 ---
 name: sagasmith-modulegen
-description: "Create, revise, review, and finalize portable SagaSmith Module Packs for the current sagasmith.content-package v2 contract through a system MCP. Use for D&D 5e or Call of Cthulhu 7e one-shots, scenarios, adventures, campaigns, solo modules, sandboxes, source revisions, and evidence-bound publication through module_draft and content_pack."
+description: "Create, revise, review, and finalize portable SagaSmith Module or rules Packs for the current sagasmith.content-package v2 contract through a system MCP. Use for D&D 5e or Call of Cthulhu 7e one-shots, scenarios, adventures, campaigns, solo modules, sandboxes, reviewed rulebooks, source revisions, and evidence-bound publication through module_draft, rulebook_draft, and content_pack."
 ---
 
-# SagaSmith Module Pack Authoring
+# SagaSmith Content Pack Authoring
 
-Build one reviewed source artifact for the active SagaSmith system, use
-`module_draft` as the only editable Pack workspace, and deliver one immutable
-`sagasmith.content-package` schema-v2 Module Pack. Treat installation and
-campaign activation as separate optional outcomes.
+Build one reviewed source artifact for the active SagaSmith system and deliver
+one immutable `sagasmith.content-package` schema-v2 Pack. Use `module_draft` for
+Module Packs and `rulebook_draft` for supported rules Packs. Treat installation
+and campaign activation as separate optional outcomes.
 
 ## Load the relevant references
 
@@ -45,7 +45,9 @@ campaign activation as separate optional outcomes.
 
 ## 1. Bind the current system contract
 
-1. Confirm the native tool list exposes `module_draft` and `content_pack`.
+1. Classify the requested Pack as module or core_rules. Confirm the native tool
+   list exposes `content_pack` and the matching `module_draft` or
+   `rulebook_draft` facade.
 2. Require Lobby phase and a host-bound authenticated campaign Owner or Keeper/
    DM. Never accept a model-supplied principal id.
 3. Read the authoring campaign and bind its exact `system_id`. Never infer the
@@ -85,6 +87,33 @@ Then add the exact system ledger:
 
 Use composition labels such as one-shot, short, long, or sandbox only for
 authoring cadence. Use only the selected system's Package classifications.
+
+For core_rules, record exact source identity, title, language, license/privacy,
+edition, portable Pack id/version, and the reviewed source areas that must be
+searchable. Do not add module scenes, actors, catalogs, or narrative endings.
+
+## Rules Pack branch
+
+Use this branch only when the live system exposes rulebook_draft and the user
+requested a rules Pack:
+
+1. Stay in Lobby and start one user-authorized managed PDF, Markdown, or text
+   source with a stable source_key and idempotency key.
+2. Retain job id/revision, inspect normalization, and use evidence search to
+   confirm representative rules and source checksums.
+3. Repair source transcription only through supported evidence-bound draft
+   operations. Never add one-book parsing heuristics to Core or the system.
+4. Finalize the reviewed current revision as an immutable private core_rules
+   schema-v2 Pack with a system-prefixed id and explicit confirmation.
+5. Inspect the artifact with content_pack get. Stop at build-only unless import
+   or activation was separately authorized.
+6. When authorized, import inactive, refresh the campaign revision, activate,
+   and verify the effective rule lock plus rule search/expand through the native
+   rule query facade.
+
+Keep copyrighted sources, normalized text, and private Pack archives local.
+After completing this branch, skip the Module-only scene, actor, catalog, and
+narrative workflow below.
 
 ## 3. Design before expanding
 

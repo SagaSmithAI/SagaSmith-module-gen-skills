@@ -29,6 +29,7 @@ LEGACY_MARKERS = {
 
 REQUIRED_SKILL_MARKERS = {
     "module_draft",
+    "rulebook_draft",
     "content_pack",
     "sagasmith.content-package",
     "references/pack-contract.md",
