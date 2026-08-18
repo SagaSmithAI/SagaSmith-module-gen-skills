@@ -1,5 +1,7 @@
 # SagaSmith Module Pack Builder
 
+[官网](https://sagasmithai.github.io) · [平台总览](https://github.com/SagaSmithAI/.github/blob/main/profile/README.md) · [托管服务](https://github.com/SagaSmithAI/SagaSmith-service) · [内容目录](https://github.com/SagaSmithAI/SagaSmith-dnd-content-library)
+
 这是一个面向当前 sagasmith.content-package v2 的 AI 原生模组构建 Skill。
 
 它是“系统感知”的，而不是把某个系统的字段伪装成通用 schema。目前明确

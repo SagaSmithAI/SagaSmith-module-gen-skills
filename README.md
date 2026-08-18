@@ -1,5 +1,7 @@
 # SagaSmith Module Pack Builder
 
+[Website](https://sagasmithai.github.io) · [Platform overview](https://github.com/SagaSmithAI/.github/blob/main/profile/README.md) · [Hosted service](https://github.com/SagaSmithAI/SagaSmith-service) · [Content catalog](https://github.com/SagaSmithAI/SagaSmith-dnd-content-library)
+
 An AI-native Skill for building reviewed SagaSmith Module Packs with the current
 sagasmith.content-package schema version 2.
 
