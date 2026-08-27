@@ -1,5 +1,10 @@
 # SagaSmith Module Pack Builder
 
+> [!IMPORTANT]
+> **本仓库已归档。** 它不再是发布输入、兼容回退或新 issue 的接收位置。当前系统专属生成流程位于 [D&D module generator](https://github.com/SagaSmithAI/Sagasmith-dnd/tree/main/skills/dnd-module-generator) 与 [CoC module generator](https://github.com/SagaSmithAI/Sagasmith-coc/tree/main/skills/coc-module-generator)。
+>
+> **This repository is archived.** It is no longer a release input, compatibility fallback, or destination for new issues. Current system-specific workflows live in the [D&D module generator](https://github.com/SagaSmithAI/Sagasmith-dnd/tree/main/skills/dnd-module-generator) and [CoC module generator](https://github.com/SagaSmithAI/Sagasmith-coc/tree/main/skills/coc-module-generator).
+
 [官网](https://sagasmithai.github.io) · [平台总览](https://github.com/SagaSmithAI/.github/blob/main/profile/README.md) · [托管服务](https://github.com/SagaSmithAI/SagaSmith-service) · [内容目录](https://github.com/SagaSmithAI/SagaSmith-dnd-content-library)
 
 这是一个面向当前 sagasmith.content-package v2 的 AI 原生模组构建 Skill。
